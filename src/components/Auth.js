@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import {Card, Button} from "react-bootstrap";
+import {Navbar, Container, NavbarBrand, Nav, NavItem} from "react-bootstrap";
+import NavbarToggle from "react-bootstrap/NavbarToggle";
+import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 
 
 class Auth extends Component {
@@ -17,17 +19,14 @@ class Auth extends Component {
   };
 
   setCookie = (c_name, c_value, ex_days) => {
-    console.log('setting cookie');
     let current_d = new Date();
     current_d.setTime(current_d.getTime() + (ex_days*24*60*60*1000));
 
     let expires = "expires="+ current_d.toUTCString();
     document.cookie = c_name + "=" + c_value + ";" + expires + ";path=/";
-    console.log('cookie was set');
   };
 
   getCookie = (c_name) => {
-    console.log('getting cookie');
     let name = c_name + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
@@ -44,13 +43,10 @@ class Auth extends Component {
   }
 
   authenticate = () => {
-    console.log('authenticate called');
     let accessToken = (window.location.search.match(/authToken=([^&]+)/) || [])[1];
 
     if (!accessToken) {
-        console.log('there is no access token on location');
         accessToken = this.getCookie('access_token');
-        console.log('token from cookie:', accessToken);
     }
 
     if (accessToken) {
@@ -67,7 +63,6 @@ class Auth extends Component {
   }
 
   checkUserSessionStatus = (accessToken) => {
-    console.log('access token:', accessToken);
     const request = {
         method: 'GET',
         headers: {
@@ -108,17 +103,27 @@ class Auth extends Component {
   }
 
   render() {
+        const googleLogin = () => {
+         window.location.href = this.state.producerLoginRedirectEndpoint + "?state=" + process.env.REACT_APP_STATE;
+        }
       return (
           <>
-              {this.state.userLoggedIn ?
-                  <Card>
-                      <Card.Body>
-                          <h2 className="text-center mb-4">{this.state.userName} you are now logged in!</h2>
-                          <Button className="w-100" onClick={this.logout}>Logout</Button>
-                      </Card.Body>
-                  </Card> :
-                  <Login producerLoginRedirectEndpoint={this.state.producerLoginRedirectEndpoint}/>
-              }
+              <Navbar bg="dark" variant="dark">
+                  <Container>
+                      <NavbarBrand href="#home">Yet another wishlist maker v.0.1</NavbarBrand>
+                      <NavbarToggle />
+                      <NavbarCollapse className="justify-content-end">
+                          <Nav>
+                            {this.state.userLoggedIn ?
+                              //   TODO: @devalv показывать Anonymous если не залогинен. При наведении показывать login с ссылкой
+                              //   TODO: @devalv аналогично для того кто уже вошел
+                            <NavItem onClick={this.logout}><Navbar.Text>{this.state.userName} you are now logged in</Navbar.Text></NavItem>:
+                            <NavItem onClick={googleLogin}><Navbar.Text>Login with Google</Navbar.Text></NavItem>
+                            }
+                          </Nav>
+                      </NavbarCollapse>
+                </Container>
+              </Navbar>
 
           </>
       );
@@ -126,24 +131,16 @@ class Auth extends Component {
 }
 
 
-function Login(props) {
-  const googleLogin = () => {
-    window.location.href = props.producerLoginRedirectEndpoint + "?state=" + process.env.REACT_APP_STATE;
-  }
-
-  return (
-      <>
-          <Card>
-              <Card.Body>
-                  <h2 className="text-center mb-4">Sign Up</h2>
-                  <Button className="w-100" onClick={googleLogin}>Login with Google</Button>
-              </Card.Body>
-          </Card>
-          <div className="w-100 text-center  mt-2">
-            Already have an account? Log In
-        </div>
-      </>
-  );
-}
+// function Login(props) {
+//   const googleLogin = () => {
+//     window.location.href = props.producerLoginRedirectEndpoint + "?state=" + process.env.REACT_APP_STATE;
+//   }
+//
+//   return (
+//       <>
+//           <NavbarToggle onClick={googleLogin}><Navbar.Text>Login with Google</Navbar.Text></NavbarToggle>
+//       </>
+//   );
+// }
 
 export default Auth;
