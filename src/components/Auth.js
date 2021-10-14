@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import {Navbar, Container, NavbarBrand, Nav, NavItem, NavDropdown} from "react-bootstrap";
+import { Navbar, Container, NavbarBrand, Nav, NavDropdown } from "react-bootstrap";
 import NavbarToggle from "react-bootstrap/NavbarToggle";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
-import {Github, Person, PersonFill, PersonX} from "react-bootstrap-icons";
+import { Github, Person, PersonFill, PersonX } from "react-bootstrap-icons";
 
 
 class Auth extends Component {
@@ -44,21 +44,23 @@ class Auth extends Component {
   }
 
   authenticate = () => {
+    // Extract token from url
     let accessToken = (window.location.search.match(/authToken=([^&]+)/) || [])[1];
 
     if (!accessToken) {
-        accessToken = this.getCookie('access_token');
+      // Extract token from cookie
+      accessToken = this.getCookie('access_token');
+    } else {
+      // Clear url
+      window.history.pushState('object', document.title, "/");
     }
 
     if (accessToken) {
-      // Try to get an access token from the server
-        console.log('received token from page');
+      // Check token is valid
         this.checkUserSessionStatus(accessToken);
-        this.setCookie('access_token', accessToken);
-        window.history.pushState('object', document.title, "/");
-
+        this.setCookie('access_token', accessToken);        
     } else {
-      // Check user is logged in
+      // There is no token info. Don`t do anything
         console.log('Can`t find token anywhere.');
     }
   }
@@ -84,7 +86,7 @@ class Auth extends Component {
       });
     })
     .catch(err => {})
-  }
+  };
 
   logout = () => {
     const request = {
@@ -103,10 +105,11 @@ class Auth extends Component {
     .catch(err => {})
   }
 
+  login = () => {
+    window.location.href = this.state.producerLoginRedirectEndpoint + "?state=" + process.env.REACT_APP_STATE;
+  }
+
   render() {
-        const googleLogin = () => {
-         window.location.href = this.state.producerLoginRedirectEndpoint + "?state=" + process.env.REACT_APP_STATE;
-        }
         const isLoggedIn = this.state.userLoggedIn;
         let nav_profile;
         if (isLoggedIn) {
@@ -123,7 +126,7 @@ class Auth extends Component {
           } else {
           nav_profile =
             <>
-              <NavDropdown.Item onClick={googleLogin}>
+              <NavDropdown.Item onClick={this.login}>
                 <Person></Person>&nbsp;Log in
               </NavDropdown.Item>
             </>
@@ -139,7 +142,7 @@ class Auth extends Component {
                           <NavDropdown title="Profile">
                               {nav_profile}
                           </NavDropdown>
-                          <Nav.Link href="https://github.com/devalv/yawm"><Github /></Nav.Link>
+                          <Nav.Link href="https://github.com/devalv/yawm-frontend"><Github /></Nav.Link>
                       </NavbarCollapse>
                 </Container>
               </Navbar>
@@ -147,23 +150,6 @@ class Auth extends Component {
           </>
       );
   }
-}
-
-
-// function Login(props) {
-//   const googleLogin = () => {
-//     window.location.href = props.producerLoginRedirectEndpoint + "?state=" + process.env.REACT_APP_STATE;
-//   }
-//
-//   return (
-//       <>
-//           <NavbarToggle onClick={googleLogin}><Navbar.Text>Login with Google</Navbar.Text></NavbarToggle>
-//       </>
-//   );
-// }
-
-function Logout(props) {
-    return (<></>);
 }
 
 export default Auth;
