@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import {Navbar, Container, NavbarBrand, Nav, NavItem} from "react-bootstrap";
+import {Navbar, Container, NavbarBrand, Nav, NavItem, NavDropdown} from "react-bootstrap";
 import NavbarToggle from "react-bootstrap/NavbarToggle";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
+import {Github, Person, PersonFill, PersonX} from "react-bootstrap-icons";
 
 
 class Auth extends Component {
@@ -106,6 +107,28 @@ class Auth extends Component {
         const googleLogin = () => {
          window.location.href = this.state.producerLoginRedirectEndpoint + "?state=" + process.env.REACT_APP_STATE;
         }
+        const isLoggedIn = this.state.userLoggedIn;
+        let nav_profile;
+        if (isLoggedIn) {
+          nav_profile =
+          <>
+            <NavDropdown.Item>
+              <PersonFill></PersonFill>&nbsp;{this.state.userName}
+            </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item onClick={this.logout}>
+                <PersonX></PersonX>&nbsp;Log out
+              </NavDropdown.Item>
+          </>
+          } else {
+          nav_profile =
+            <>
+              <NavDropdown.Item onClick={googleLogin}>
+                <Person></Person>&nbsp;Log in
+              </NavDropdown.Item>
+            </>
+          }
+
       return (
           <>
               <Navbar bg="dark" variant="dark">
@@ -113,14 +136,10 @@ class Auth extends Component {
                       <NavbarBrand href="#home">Yet another wishlist maker v.0.1</NavbarBrand>
                       <NavbarToggle />
                       <NavbarCollapse className="justify-content-end">
-                          <Nav>
-                            {this.state.userLoggedIn ?
-                              //   TODO: @devalv показывать Anonymous если не залогинен. При наведении показывать login с ссылкой
-                              //   TODO: @devalv аналогично для того кто уже вошел
-                            <NavItem onClick={this.logout}><Navbar.Text>{this.state.userName} you are now logged in</Navbar.Text></NavItem>:
-                            <NavItem onClick={googleLogin}><Navbar.Text>Login with Google</Navbar.Text></NavItem>
-                            }
-                          </Nav>
+                          <NavDropdown title="Profile">
+                              {nav_profile}
+                          </NavDropdown>
+                          <Nav.Link href="https://github.com/devalv/yawm"><Github /></Nav.Link>
                       </NavbarCollapse>
                 </Container>
               </Navbar>
@@ -142,5 +161,9 @@ class Auth extends Component {
 //       </>
 //   );
 // }
+
+function Logout(props) {
+    return (<></>);
+}
 
 export default Auth;
