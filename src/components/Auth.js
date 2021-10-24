@@ -28,19 +28,19 @@ class Auth extends Component {
     };
 
     getCookie = (c_name) => {
-    let name = c_name + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) === ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) === 0) {
-        return c.substring(name.length, c.length);
-      }
-    }
-    return "";
+        let name = c_name + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
     };
 
     authenticate = () => {
@@ -90,18 +90,18 @@ class Auth extends Component {
 
     logout = () => {
     const request = {
-      method: 'GET',
-      headers: {
-        "Authorization": "Bearer " + this.getCookie('access_token')
-      },
-      credentials: 'include'
-    }
+        method: 'GET',
+        headers: {
+            "Authorization": "Bearer " + this.getCookie('access_token')
+        },
+        credentials: 'include'
+    };
 
     fetch(this.state.producerLogoutEndpoint, request)
     .then(response => {
         if(!response.ok) throw new Error(response.data);
         else {this.setCookie('access_token', null); window.location.reload();}
-      })
+    })
     .catch(err => {})
     };
 
