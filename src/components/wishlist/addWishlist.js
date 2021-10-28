@@ -3,48 +3,76 @@ import React, {useEffect, useState} from "react";
 
 function AddWishlist(props) {
 
-    console.log('props are:', props)
-
     // TODO: @devalv move to env
     const wishlistsEndpointV2 = "http://localhost:8000/v2/wishlists/";
+
     const [productInputs, setProductInputs] = useState([])
+    // TODO: @devalv оставить только formYValues?
+    const [formYValues, setFormYValues] = useState([{url: ""}])
+
+    const handleYChange = (i, e) => {
+        const newFormValues = formYValues;
+        newFormValues[i][e.target.name] = e.target.value;
+        setFormYValues(newFormValues);
+      }
+
+    const addProductLine = (index) => {
+        setProductInputs([...productInputs, productLine(index)]);
+    }
+
+    const addFormFields = () => {
+        // setFormValues(formYValues => [...formYValues, new_element]);
+        setFormYValues([...formYValues, { url: "" }]);
+        addProductLine(productInputs.length);
+      }
+
+    const removeFormFields = (i) => {
+        let newFormValues = [...formYValues];
+        newFormValues.splice(i, 1);
+        setFormYValues(newFormValues)
+    }
+
 
     const modalClose = () => {
         setProductInputs([]);
+        setFormYValues([]);
         props.handleClose();
     }
 
     const createWishlist = (e) => {
-        console.log("new yoba called!");
         e.preventDefault(); // prevent the default action
 
-        // const request = {
-        //     method: "POST",
-        //     headers: {"Content-Type": "application/json", "Authorization": "Bearer " + props.token},
-        //     body: JSON.stringify({product_urls: productUrls}),
-        //     credentials: "include",
-        // };
-        //
-        // await fetch(wishlistsEndpointV2, request)
-        //     .then((response) => {
-        //         if (!response.ok) throw new Error(response.data);
-        //         else return response.json();
-        //     })
-        //     .then((data) => {
-        //         console.log("Sent!");
-        //         props.handleClose();
-        //     })
-        //     .catch((err) => {
-        //     });
+        const request = {
+            method: "POST",
+            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + props.token},
+            body: JSON.stringify({product_urls: formYValues}),
+            credentials: "include",
+        };
+
+        fetch(wishlistsEndpointV2, request)
+            .then((response) => {
+                if (!response.ok) throw new Error(response.data);
+                else return response.json();
+            })
+            .then((data) => {
+                console.log("Sent!");
+                props.handleClose();
+                window.location.reload();
+            })
+            .catch((err) => {
+                console.log('err:', err)
+            });
     };
 
-    const productLine = () => {
+    const productLine = (index) => {
         return (
             <>
                 <Form.Group className="full-width">
                     <Form.Control
                         type="text"
                         placeholder="https://ya.ru"
+                        name="url"
+                        onChange={e => handleYChange(index, e)}
                     />
                     <Form.Text className="text-muted">
                         Product url must be a unique value.
@@ -54,9 +82,7 @@ function AddWishlist(props) {
         )
     }
 
-    const addProductLine = () => {
-        setProductInputs([...productInputs, productLine()]);
-    }
+
 
     const tierInputs = productInputs.map((tier, i) => (
         <Form.Row key={i}>
@@ -77,7 +103,7 @@ function AddWishlist(props) {
                     {tierInputs}
 
                     <hr />
-                    <Button className="addMoreBtn" onClick={addProductLine}>
+                    <Button className="addMoreBtn" onClick={addFormFields}>
                         +Add Product
                     </Button>
                     <hr />

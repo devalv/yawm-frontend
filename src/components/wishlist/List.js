@@ -9,7 +9,7 @@ import AuthContext from "../auth/authContext";
 import AddWishlist from "./addWishlist";
 
 
-function Wishlist(props) {
+function Wishlist() {
 
     const [authContext] = useContext(AuthContext);
     const {REACT_APP_API_URL} = process.env;
@@ -67,7 +67,7 @@ function Wishlist(props) {
 
     return (
     <>
-        <AddWishlist show={show} handleClose={handleClose}/>
+        <AddWishlist show={show} handleClose={handleClose} token={authContext.token}/>
         <br></br>
         <Container>
             <CardGroup>
