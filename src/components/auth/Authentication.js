@@ -106,7 +106,7 @@ function Authentication() {
         }
 
         if (accessToken !== 'null') {
-            console.log('effect access token:', accessToken)
+            // console.log('effect access token:', accessToken)
             // Check token is valid
             checkUserSessionStatus(accessToken);
             // TODO: do not set cookie if toke in not valid
@@ -119,13 +119,12 @@ function Authentication() {
 
     //
     useEffect(() => {
-        console.log("calling auth useEffect");
+        // console.log("calling auth useEffect");
 
         authenticate();
 
     }, [])
-    //
-    console.log('authenticated in auth.js:', authState.authenticated)
+    // console.log('authenticated in auth.js:', authState.authenticated)
 
     let nav_profile;
 

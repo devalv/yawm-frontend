@@ -12,7 +12,7 @@ function App() {
         authenticated: false
     });
 
-    console.log('auth state in app js:', authState)
+    // console.log('auth state in app js:', authState)
 
     return (
         <AuthContext.Provider value={[authState, setauthState]}>

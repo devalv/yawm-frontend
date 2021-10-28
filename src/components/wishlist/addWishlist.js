@@ -8,23 +8,16 @@ function AddWishlist(props) {
 
     const [productInputs, setProductInputs] = useState([])
     // TODO: @devalv оставить только formYValues?
-    const [formYValues, setFormYValues] = useState([{url: ""}])
+    const [formYValues, setFormYValues] = useState([])
 
     const handleYChange = (i, e) => {
-        const newFormValues = formYValues;
-        newFormValues[i][e.target.name] = e.target.value;
-        setFormYValues(newFormValues);
+        setFormYValues([...formYValues, {"url": e.target.value}]);
       }
 
-    const addProductLine = (index) => {
-        setProductInputs([...productInputs, productLine(index)]);
+    const addProductLine = () => {
+        setProductInputs([...productInputs, productLine(formYValues.length)]);
+        setFormYValues([...formYValues, {}]);
     }
-
-    const addFormFields = () => {
-        // setFormValues(formYValues => [...formYValues, new_element]);
-        setFormYValues([...formYValues, { url: "" }]);
-        addProductLine(productInputs.length);
-      }
 
     const removeFormFields = (i) => {
         let newFormValues = [...formYValues];
@@ -39,8 +32,23 @@ function AddWishlist(props) {
         props.handleClose();
     }
 
+    const validateForm = () => {
+        const validUrls = []
+        formYValues.forEach((row) => {
+            let url = row.url;
+
+            console.log('url:', url)
+            if (url) {
+               validUrls.push({"url": url});
+            }
+        });
+        setFormYValues(validUrls)
+    }
+
     const createWishlist = (e) => {
         e.preventDefault(); // prevent the default action
+
+        validateForm()
 
         const request = {
             method: "POST",
@@ -71,7 +79,6 @@ function AddWishlist(props) {
                     <Form.Control
                         type="text"
                         placeholder="https://ya.ru"
-                        name="url"
                         onChange={e => handleYChange(index, e)}
                     />
                     <Form.Text className="text-muted">
@@ -82,13 +89,15 @@ function AddWishlist(props) {
         )
     }
 
-
-
     const tierInputs = productInputs.map((tier, i) => (
         <Form.Row key={i}>
             {tier}
         </Form.Row>
         ))
+
+    useEffect(() => {
+        addProductLine();
+    }, [])
 
     return (
         <Modal show={props.show} onHide={props.handleClose}>
@@ -103,7 +112,7 @@ function AddWishlist(props) {
                     {tierInputs}
 
                     <hr />
-                    <Button className="addMoreBtn" onClick={addFormFields}>
+                    <Button className="addMoreBtn" onClick={addProductLine}>
                         +Add Product
                     </Button>
                     <hr />

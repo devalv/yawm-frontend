@@ -42,7 +42,7 @@ function Wishlist() {
     }
 
     useEffect(() => {
-        console.log("calling useEffect");
+        // console.log("calling useEffect");
         const getWishlists = () => {
             const request = {
                 method: "GET",
