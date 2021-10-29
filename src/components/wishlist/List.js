@@ -68,12 +68,10 @@ function Wishlist() {
     return (
     <>
         <AddWishlist show={show} handleClose={handleClose} token={authContext.token}/>
-        <br></br>
         <Container>
             <CardGroup>
                 <Row xs={1} md={3} xxl={4} className="g-4">
                     {new_wishlist_card_button()}
-
                     {wishlists.map((wishlist) => (
                         <Card key={wishlist.id}>
                             <Card.Img
@@ -86,8 +84,7 @@ function Wishlist() {
                                     Wishlist {wishlist.id} by `{wishlist.username}` created at{" "}
                                     {wishlist.created_at}
                                 </Card.Text>
-                                {/* TODO: @devalv link to a wishlist card */}
-                                <Card.Link href="#">Card Link</Card.Link>
+                                <Card.Link href={`/wishlist/${wishlist.id}`}>See details</Card.Link>
                             </Card.Body>
                         </Card>
                     ))}

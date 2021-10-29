@@ -157,7 +157,7 @@ function Authentication() {
         <>
             <Navbar bg="dark" variant="dark">
                 <Container>
-                    <NavbarBrand href="#home">
+                    <NavbarBrand href="/">
                         Yet another wishlist maker v.0.1
                     </NavbarBrand>
                     <NavbarToggle/>
