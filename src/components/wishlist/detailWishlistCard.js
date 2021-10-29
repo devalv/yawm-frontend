@@ -1,5 +1,7 @@
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
+import DetailProductCard from "./product/detailProductCard";
+import {CardGroup, Container, Row} from "react-bootstrap";
 
 function DetailWishlistCard() {
     // TODO: @devalv use env
@@ -8,6 +10,16 @@ function DetailWishlistCard() {
     const [wishlistDetail, setWishlistDetail] = useState({"name": "", "created_at": "", "products": []});
 
     // TODO: @devalv productCard component
+    const [productCards, setProductCards] = useState([]);
+
+    const setProducts = (products) => {
+        const productComponents = [];
+        products.forEach((product) => {
+            console.log('product:', product)
+            productComponents.push(<DetailProductCard product={product}/>);
+        });
+        setProductCards(productComponents);
+    }
 
     useEffect(() => {
         // console.log("calling useEffect");
@@ -24,6 +36,7 @@ function DetailWishlistCard() {
                 })
                 .then((data) => {
                     setWishlistDetail(data);
+                    setProducts(data.products);
                 })
                 .catch((err) => {
                 });
@@ -37,6 +50,15 @@ function DetailWishlistCard() {
     return (
         <>
             <h3>Wishlist `{wishlistDetail.name}` was created at: `{wishlistDetail.created_at}` and consists of `{wishlistDetail.products.length}` products.</h3>
+            {/*TODO: @devalv container*/}
+            <Container>
+                <CardGroup>
+                    <Row xs={1} md={3} xxl={4} className="g-4">
+                        {productCards}
+                    </Row>
+                </CardGroup>
+            </Container>
+
         </>
     )
 
