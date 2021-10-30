@@ -1,25 +1,41 @@
 import React, { useEffect, useContext } from "react";
-import {Container, Nav, Navbar, NavbarBrand, NavDropdown} from "react-bootstrap";
-import {Github, Person, PersonFill, PersonX} from "react-bootstrap-icons";
-import NavbarToggle from "react-bootstrap/NavbarToggle";
-import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 import AuthContext from "./authContext";
 
-const {REACT_APP_API_URL} = process.env;
-const LoginRedirectEndpoint = REACT_APP_API_URL + '/react_login/'
-const LogoutEndpoint = REACT_APP_API_URL + '/logout/'
-const UserInfoEndpoint = REACT_APP_API_URL + '/user/info/'
+function Authentication() {
+    const {REACT_APP_API_URL} = process.env;
+    const UserInfoEndpoint = REACT_APP_API_URL + '/user/info/'
+    const LoginRedirectEndpoint = REACT_APP_API_URL + '/react_login/'
+    const LogoutEndpoint = REACT_APP_API_URL + '/logout/'
+    const [authState, setauthState] = useContext(AuthContext);
 
-
-const setCookie = (c_name, c_value, ex_days) => {
+    const login = () => {
+        let client_state = Math.random().toString(36).substring(2, 30);
+        window.location.href = LoginRedirectEndpoint + "?state=" + client_state;
+    };
+    const logout = () => {
+        console.log('calling logout')
+        let request = {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + getCookie("access_token"),
+            },
+            credentials: "include",
+        };
+        fetch(LogoutEndpoint, request)
+        .then((response) => {
+            setauthState({username: null, authenticated: false, token: null, login: login, logout: null})
+            setCookie("access_token", null);
+            window.location.reload();
+        })
+};
+    const setCookie = (c_name, c_value, ex_days) => {
     let current_d = new Date();
     current_d.setTime(current_d.getTime() + ex_days * 24 * 60 * 60 * 1000);
 
     let expires = "expires=" + current_d.toUTCString();
     document.cookie = c_name + "=" + c_value + ";" + expires + ";path=/";
 };
-
-const getCookie = (c_name) => {
+    const getCookie = (c_name) => {
     let name = c_name + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(";");
@@ -35,12 +51,8 @@ const getCookie = (c_name) => {
     return "";
 };
 
-
-function Authentication() {
-
-    const [authState, setauthState] = useContext(AuthContext);
-
     const checkUserSessionStatus = (accessToken) => {
+        console.log('check user sessions status')
         const request = {
             method: "GET",
             headers: {
@@ -51,41 +63,14 @@ function Authentication() {
 
         fetch(UserInfoEndpoint, request)
             .then((response) => {
-                if (!response.ok) throw new Error(response.data);
+                if (!response.ok) {
+                    logout();
+                    throw new Error('Token is not valid');
+                }
                 else return response.json();
             })
             .then((data) => {
-                // handleLogin()
-                setauthState({username: data["username"], authenticated: true, token: accessToken})
-
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
-    const login = () => {
-        let client_state = Math.random().toString(36).substring(2, 30);
-        window.location.href = LoginRedirectEndpoint + "?state=" + client_state;
-    };
-
-    const logout = () => {
-        let request = {
-            method: "GET",
-            headers: {
-                Authorization: "Bearer " + getCookie("access_token"),
-            },
-            credentials: "include",
-        };
-
-        fetch(LogoutEndpoint, request)
-            .then((response) => {
-                if (!response.ok) throw new Error(response.data);
-                else {
-                    setauthState({username: "", authenticated: false, token: ""})
-                    setCookie("access_token", null);
-                    window.location.reload();
-                }
+                setauthState({username: data["username"], authenticated: true, token: accessToken, login: null, logout: logout})
             })
             .catch((err) => {
                 console.log(err);
@@ -106,7 +91,7 @@ function Authentication() {
         }
 
         if (accessToken !== 'null') {
-            // console.log('effect access token:', accessToken)
+            console.log('effect access token:', accessToken)
             // Check token is valid
             checkUserSessionStatus(accessToken);
             // TODO: do not set cookie if toke in not valid
@@ -114,63 +99,19 @@ function Authentication() {
         } else {
             // There is no token info. Don`t do anything
             console.log("Can`t find token anywhere.");
+            setauthState({login: login, logout: null, authenticated: false, username: null})
         }
     };
 
-    //
     useEffect(() => {
-        // console.log("calling auth useEffect");
-
+        console.log("calling auth useEffect");
         authenticate();
 
     }, [])
     // console.log('authenticated in auth.js:', authState.authenticated)
 
-    let nav_profile;
-
-    if (authState.authenticated) {
-        nav_profile = (
-            <>
-                <NavDropdown.Item>
-                    <PersonFill/>
-                    &nbsp;{authState.username}
-                </NavDropdown.Item>
-                <NavDropdown.Divider/>
-                <NavDropdown.Item onClick={logout}>
-                    <PersonX/>
-                    &nbsp;Log out
-                </NavDropdown.Item>
-            </>
-        );
-    } else {
-        nav_profile = (
-            <>
-                <NavDropdown.Item onClick={login}>
-                    <Person/>
-                    &nbsp;Log in
-                </NavDropdown.Item>
-            </>
-        );
-    }
-
     return (
         <>
-            <Navbar bg="dark" variant="dark">
-                <Container>
-                    <NavbarBrand href="/">
-                        Yet another wishlist maker v.0.1
-                    </NavbarBrand>
-                    <NavbarToggle/>
-                    <NavbarCollapse className="justify-content-end">
-                        <NavDropdown title="Profile" id="ProfileNav">
-                            {nav_profile}
-                        </NavDropdown>
-                        <Nav.Link href="https://github.com/devalv/yawm-frontend">
-                            <Github/>
-                        </Nav.Link>
-                    </NavbarCollapse>
-                </Container>
-            </Navbar>
         </>
     );
 }
