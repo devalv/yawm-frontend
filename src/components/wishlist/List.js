@@ -5,7 +5,7 @@ import {
     Container,
     Row,
 } from "react-bootstrap";
-import AuthContext from "../auth/authContext";
+import {AuthContext} from "../auth/authContext";
 import AddWishlist from "./addWishlist";
 
 
@@ -42,7 +42,6 @@ function Wishlist() {
     }
 
     useEffect(() => {
-        // console.log("calling useEffect");
         const getWishlists = () => {
             const request = {
                 method: "GET",

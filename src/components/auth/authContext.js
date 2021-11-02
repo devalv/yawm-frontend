@@ -1,5 +1,5 @@
 import {createContext} from "react";
 
-const AuthContext = createContext({username: null, token: null, authenticated: false, login: null, logout: null});
-
-export default AuthContext;
+export const anonymousUser = {username: null, token: '', authenticated: false}
+export const AuthContext = createContext({});
+AuthContext.displayName = 'AuthenticationContext';

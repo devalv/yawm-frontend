@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import AuthContext from "./auth/authContext";
+import { AuthContext, anonymousUser } from "./auth/authContext";
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,25 +11,50 @@ import Wishlist  from "./wishlist/List";
 import DetailWishlistCard from "./wishlist/detailWishlistCard";
 import NavbarC from "./Navbar";
 
+const {REACT_APP_API_URL} = process.env;
 
 function App() {
-    const [authState, setauthState] = useState({
-        token: null,
-        username: null,
-        authenticated: false,
-        login: null,
-        logout: null
-    });
 
-    // console.log('auth state in app js:', authState)
+    const [AuthState, setAuthState] = useState(anonymousUser);
+
+    const logout = () => {
+        setAuthState(anonymousUser);
+        localStorage.setItem("access_token", '');
+    }
+
+    const login = () => {
+        console.log('login called')
+        // TODO: @devalv check that client state changes
+        const LoginRedirectEndpoint = REACT_APP_API_URL + '/react_login/'
+        let client_state = Math.random().toString(36).substring(2, 30);
+        console.log('client state:', client_state)
+        window.location.href = LoginRedirectEndpoint + "?state=" + client_state;
+    };
+
+    const backendLogout = () => {
+        const LogoutEndpoint = REACT_APP_API_URL + '/logout/'
+        // TODO: @devalv как экспортировать функцию и когда ее использовать?
+        logout()
+        // send request to a backend
+        let request = {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + AuthState.token,
+            },
+            credentials: "include",
+        };
+
+        fetch(LogoutEndpoint, request);
+        window.location.reload();
+    }
 
     return (
     <Router>
-        {/*TODO: @devalv navbar as component*/}
-        <AuthContext.Provider value={[authState, setauthState]}>
-            <Authentication/>
+        <AuthContext.Provider value={[AuthState, setAuthState]}>
 
-            <NavbarC authenticated={authState.authenticated} username={authState.username} login={authState.login} logout={authState.logout}/>
+            <Authentication logoutUser={logout} loginUser={login}/>
+
+            <NavbarC authenticated={AuthState.authenticated} username={AuthState.username} logoutUser={backendLogout} loginUser={login}/>
 
             <br/><br/>
             <Switch>

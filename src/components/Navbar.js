@@ -2,7 +2,7 @@ import {Container, Nav, Navbar, NavbarBrand, NavDropdown} from "react-bootstrap"
 import NavbarToggle from "react-bootstrap/NavbarToggle";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 import {Github, Person, PersonFill, PersonX} from "react-bootstrap-icons";
-import React, {useState} from "react";
+import React from "react";
 
 
 function NavbarC(props) {
@@ -17,8 +17,7 @@ function NavbarC(props) {
                     &nbsp;{props.username}
                 </NavDropdown.Item>
                 <NavDropdown.Divider/>
-                {/*TODO: @devalv use react route?*/}
-                <NavDropdown.Item onClick={props.logout}>
+                <NavDropdown.Item onClick={props.logoutUser}>
                     <PersonX/>
                     &nbsp;Log out
                 </NavDropdown.Item>
@@ -28,8 +27,7 @@ function NavbarC(props) {
         {
             return (
             <>
-                {/*TODO: @devalv use react route?*/}
-                <NavDropdown.Item onClick={props.login}>
+                <NavDropdown.Item onClick={props.loginUser}>
                     <Person/>
                     &nbsp;Log in
                 </NavDropdown.Item>

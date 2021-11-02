@@ -15,14 +15,12 @@ function DetailWishlistCard() {
     const setProducts = (products) => {
         const productComponents = [];
         products.forEach((product) => {
-            console.log('product:', product)
-            productComponents.push(<DetailProductCard product={product}/>);
+            productComponents.push(<DetailProductCard product={product} key={product.id}/>);
         });
         setProductCards(productComponents);
     }
 
     useEffect(() => {
-        // console.log("calling useEffect");
         const getWishlistInfo = () => {
             const request = {
                 method: "GET",
