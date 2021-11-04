@@ -41,7 +41,14 @@ function NavbarC(props) {
             <Navbar bg="dark" variant="dark">
                 <Container>
                     <NavbarBrand href="/">
-                        Yet another wishlist maker v.0.1
+                        <img
+                            alt=""
+                            src="/logo64.png"
+                            width="30"
+                            height="30"
+                            className="d-inline-block align-top"
+                        />
+                        &nbsp;Yet another wishlist maker v.0.1
                     </NavbarBrand>
                     <NavbarToggle/>
                     <NavbarCollapse className="justify-content-end">
