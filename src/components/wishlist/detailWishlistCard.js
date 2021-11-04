@@ -3,10 +3,12 @@ import {useEffect, useState} from "react";
 import DetailProductCard from "./product/detailProductCard";
 import {CardGroup, Container, Row} from "react-bootstrap";
 
+const {REACT_APP_API_V2_URL} = process.env;
+
 function DetailWishlistCard() {
     // TODO: @devalv use env
     const { id } = useParams();
-    const wishlistDetailEndpoint = "http://localhost:8000/v2/wishlists/" + id;
+    const wishlistDetailEndpoint = REACT_APP_API_V2_URL + "/wishlists/" + id;
     const [wishlistDetail, setWishlistDetail] = useState({"name": "", "created_at": "", "products": []});
 
     // TODO: @devalv productCard component
@@ -48,7 +50,6 @@ function DetailWishlistCard() {
     return (
         <>
             <h3>Wishlist `{wishlistDetail.name}` was created at: `{wishlistDetail.created_at}` and consists of `{wishlistDetail.products.length}` products.</h3>
-            {/*TODO: @devalv container*/}
             <Container>
                 <CardGroup>
                     <Row xs={1} md={3} xxl={4} className="g-4">

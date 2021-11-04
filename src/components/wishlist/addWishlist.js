@@ -1,10 +1,12 @@
 import {Button, Form, Modal} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 
+const {REACT_APP_API_V2_URL} = process.env;
+
 function AddWishlist(props) {
 
     // TODO: @devalv move to env
-    const wishlistsEndpointV2 = "http://localhost:8000/v2/wishlists/";
+    const wishlistsEndpointV2 = REACT_APP_API_V2_URL + "/wishlists/";
 
     const [productInputs, setProductInputs] = useState([])
     // TODO: @devalv оставить только formYValues?

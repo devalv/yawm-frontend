@@ -5,7 +5,7 @@ const {REACT_APP_API_URL} = process.env;
 const UserInfoEndpoint = REACT_APP_API_URL + '/user/info/'
 
 function Authentication(props) {
-    const [AuthState, setAuthState] = useContext(AuthContext);
+    const [, setAuthState] = useContext(AuthContext);
     const checkUserTokenStatus = (accessToken) => {
         const request = {
             method: "GET",
