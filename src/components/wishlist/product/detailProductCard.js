@@ -42,14 +42,7 @@ function DetailProductCard(props) {
     }
 
     const ReserveBtn = () => {
-        if (reserved)
-        {
-            return (
-            <>
-               <Button variant="secondary">Reserve</Button>
-            </>)
-        }
-        else
+        if (!reserved)
         {
             return (
             <>
@@ -57,6 +50,9 @@ function DetailProductCard(props) {
              </>
        )
        }
+        else {
+            return (<></>)
+        }
     }
 
     return (

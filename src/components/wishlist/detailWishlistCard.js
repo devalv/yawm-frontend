@@ -1,23 +1,29 @@
-import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useParams, useHistory} from "react-router-dom";
+import React, {useEffect, useState} from "react";
 import DetailProductCard from "./product/detailProductCard";
-import {CardGroup, Container, Row} from "react-bootstrap";
+import {Button, CardGroup, Container, Row} from "react-bootstrap";
 
-const {REACT_APP_API_V2_URL} = process.env;
 
-function DetailWishlistCard() {
-    // TODO: @devalv use env
+const {REACT_APP_API_V2_URL, REACT_APP_API_URL} = process.env;
+
+function DetailWishlistCard(props) {
     const { id } = useParams();
-    const wishlistDetailEndpoint = REACT_APP_API_V2_URL + "/wishlists/" + id;
-    const [wishlistDetail, setWishlistDetail] = useState({"name": "", "created_at": "", "products": []});
+    const history = useHistory();
+    const userId = props.userId;
+    const token = props.token;
 
-    // TODO: @devalv productCard component
+    const wishlistDetailEndpoint = REACT_APP_API_V2_URL + "/wishlists/" + id;
+    const wishlistDeleteEndpoint = REACT_APP_API_URL + "/wishlist/" + id;
+
+    console.log('Delete endpoint:', wishlistDeleteEndpoint);
+
+    const [wishlistDetail, setWishlistDetail] = useState({"name": "", "created_at": "", "user_id": "", "products": []});
     const [productCards, setProductCards] = useState([]);
 
     const setProducts = (products) => {
         const productComponents = [];
         products.forEach((product) => {
-            productComponents.push(<DetailProductCard product={product} key={product.id}/>);
+            productComponents.push(<DetailProductCard product={product} key={product.id} userId={userId}/>);
         });
         setProductCards(productComponents);
     }
@@ -43,13 +49,53 @@ function DetailWishlistCard() {
         };
 
         getWishlistInfo();
+    }, [])
 
-    }, [wishlistDetailEndpoint])
+    const deleteWishlist = () => {
+        const request = {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+            credentials: "include",
+        };
+        fetch(wishlistDeleteEndpoint, request)
+                .then((response) => {
+                    if (!response.ok) throw new Error(response.data);
+                    else history.push("/");
+                })
+                .catch((err) => {
+                    console.log('err:', err)
+        });
+    }
+
+    function WishlistDetails() {
+
+        if (wishlistDetail.user_id === userId)
+        {
+            return (
+            <>
+                <h1>Ваш вишлист `{wishlistDetail.name}` был создан: `{wishlistDetail.created_at}` и состоит из
+                    `{wishlistDetail.products.length}` продуктов.</h1>
+                <Button variant="danger" onClick={deleteWishlist}>Удалить</Button>
+            </>
+            )
+       }
+        else {
+            return (
+            <>
+                <h1>Вишлист `{wishlistDetail.name}` был создан `{wishlistDetail.username}`: `{wishlistDetail.created_at}` и состоит из
+                    `{wishlistDetail.products.length}` продуктов.</h1>
+            </>
+            )
+        }
+    }
 
 
     return (
         <>
-            <h3>Wishlist `{wishlistDetail.name}` was created at: `{wishlistDetail.created_at}` and consists of `{wishlistDetail.products.length}` products.</h3>
+            <Container>
+                <WishlistDetails />
+            </Container>
+            <hr />
             <Container>
                 <CardGroup>
                     <Row xs={1} md={3} xxl={4} className="g-4">

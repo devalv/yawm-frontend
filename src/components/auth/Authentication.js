@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react";
 import {AuthContext} from "./authContext";
 
 const {REACT_APP_API_URL} = process.env;
-const UserInfoEndpoint = REACT_APP_API_URL + '/user/info/'
+const UserInfoEndpoint = REACT_APP_API_URL + '/user/info'
 
 function Authentication(props) {
     const [, setAuthState] = useContext(AuthContext);
@@ -23,7 +23,7 @@ function Authentication(props) {
                 else return response.json();
             })
             .then((data) => {
-                setAuthState({username: data["username"], authenticated: true, token: accessToken});
+                setAuthState({username: data["username"], authenticated: true, token: accessToken, user_id: data["id"]});
                 localStorage.setItem("access_token", accessToken);
             });
     };

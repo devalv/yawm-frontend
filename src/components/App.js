@@ -23,16 +23,14 @@ function App() {
     }
 
     const login = () => {
-        console.log('login called')
         // TODO: @devalv check that client state changes
-        const LoginRedirectEndpoint = REACT_APP_API_URL + '/react_login/'
+        const LoginRedirectEndpoint = REACT_APP_API_URL + '/react_login'
         let client_state = Math.random().toString(36).substring(2, 30);
-        console.log('client state:', client_state)
         window.location.href = LoginRedirectEndpoint + "?state=" + client_state;
     };
 
     const backendLogout = () => {
-        const LogoutEndpoint = REACT_APP_API_URL + '/logout/'
+        const LogoutEndpoint = REACT_APP_API_URL + '/logout'
         // TODO: @devalv как экспортировать функцию и когда ее использовать?
         logout()
         // send request to a backend
@@ -55,13 +53,12 @@ function App() {
             <Authentication logoutUser={logout} loginUser={login}/>
 
             <NavbarC authenticated={AuthState.authenticated} username={AuthState.username} logoutUser={backendLogout} loginUser={login}/>
-
             <br/><br/>
             <Switch>
                 <Route exact path="/">
                     <Wishlist/>
                 </Route>
-                <Route path="/wishlist/:id" children={<DetailWishlistCard />} />
+                <Route path="/wishlist/:id" children={<DetailWishlistCard userId={AuthState.user_id} token={AuthState.token}/>} />
             </Switch>
         </AuthContext.Provider>
     </Router>
