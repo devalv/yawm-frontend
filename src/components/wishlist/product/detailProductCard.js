@@ -1,10 +1,12 @@
 import {Button, Card} from "react-bootstrap";
 import React from "react";
+import EditWishlistProductModal from "./modals/editProductModal";
 
 const {REACT_APP_API_V2_URL} = process.env;
 
 function DetailProductCard(props) {
-
+    const owner = props.owner;
+    const token = props.token;
     const url = props.product.url;
     const name = props.product.name;
     const id = props.product.id;
@@ -14,42 +16,69 @@ function DetailProductCard(props) {
     const reserved = props.product.reserved;
     const card_bg = (reserved) ? "secondary": "success";
 
-    const reserve_product = () => {
-        const ReverseEndpoint = REACT_APP_API_V2_URL + '/wishlist-products/' + id  + '/reserve';
+    const [modalEditProductShow, setModalEditProductShow] = React.useState(false);
 
+    const reserveProduct = () => {
+        const productReserveEndpoint = REACT_APP_API_V2_URL + '/wishlist-products/' + id  + '/reserve';
         const request = {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             credentials: "include",
         };
-
-        fetch(ReverseEndpoint, request)
+        fetch(productReserveEndpoint, request)
             .then((response) => {
                 if (!response.ok) throw new Error(response.data);
                 else return response.json();
             })
             .then((data) => {
-                console.log("Sent!");
                 props.handleClose();
                 window.location.reload();
             })
             .catch((err) => {
                 console.log('err:', err)
             });
-
         window.location.reload();
+    }
 
+    const deleteProduct = () => {
+        const productDeleteEndpoint = REACT_APP_API_V2_URL + '/wishlist-products/' + id;
+        const request = {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+            credentials: "include",
+        };
+        fetch(productDeleteEndpoint, request)
+                .then((response) => {
+                    if (!response.ok) throw new Error(response.data);
+                    else window.location.reload()
+                })
+                .catch((err) => {
+                    console.log('err:', err)
+        });
     }
 
     const ReserveBtn = () => {
-        if (!reserved)
+        if (!reserved && !owner)
         {
             return (
             <>
-                <Button variant="primary" onClick={reserve_product}>Reserve</Button>
-             </>
+                <Button variant="primary" onClick={reserveProduct}>Reserve</Button>
+            </>
        )
        }
+        else if (owner)
+        {
+           return (
+            <>
+                <Button variant="warning" onClick={() => setModalEditProductShow(true)}>Редактировать</Button>
+                <Button variant="danger" onClick={deleteProduct}>Удалить</Button>
+                <EditWishlistProductModal
+                    show={modalEditProductShow}
+                    onHide={() => setModalEditProductShow(false)}
+                />
+            </>
+           )
+        }
         else {
             return (<></>)
         }

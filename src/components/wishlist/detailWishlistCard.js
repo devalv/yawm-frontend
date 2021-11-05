@@ -5,8 +5,6 @@ import {Button, CardGroup, Container, Row} from "react-bootstrap";
 import DetailProductCard from "./product/detailProductCard";
 import EditWishlistModal from "./modals/editWishlistModal";
 import AddWishlistProductModal from "./modals/addProductModal"
-import EditWishlistProductModal from "./product/modals/editProductModal";
-
 
 const {REACT_APP_API_V2_URL, REACT_APP_API_URL} = process.env;
 
@@ -21,18 +19,21 @@ function DetailWishlistCard(props) {
     const wishlistDeleteEndpoint = REACT_APP_API_URL + "/wishlist/" + id;
 
     const [wishlistDetail, setWishlistDetail] = useState({"name": "", "created_at": "", "user_id": "", "products": []});
-    const [productCards, setProductCards] = useState([]);
+    const [products, setProducts] = useState([]);
 
     const [modalEditWishlistShow, setModalEditWishlistShow] = React.useState(false);
     const [modalAddProductShow, setModalAddProductShow] = React.useState(false);
-    const [modalEditProductShow, setModalEditProductShow] = React.useState(false);
 
-    const setProducts = (products) => {
-        const productComponents = [];
-        products.forEach((product) => {
-            productComponents.push(<DetailProductCard product={product} key={product.id} userId={userId}/>);
+
+    function ProductCards() {
+        const productsData = products;
+        let productComponents = [];
+        productsData.forEach((product) => {
+            productComponents.push(<DetailProductCard product={product} key={product.id} token={token} owner={(userId === wishlistDetail.user_id) ? true: false}/>);
         });
-        setProductCards(productComponents);
+        return (
+            <>{productComponents}</>
+        )
     }
 
     useEffect(() => {
@@ -101,10 +102,6 @@ function DetailWishlistCard(props) {
                     token={token}
                 />
 
-                <EditWishlistProductModal
-                    show={modalEditProductShow}
-                    onHide={() => setModalEditProductShow(false)}
-                />
             </>
             )
        }
@@ -128,7 +125,9 @@ function DetailWishlistCard(props) {
             <Container>
                 <CardGroup>
                     <Row xs={1} md={3} xxl={4} className="g-4">
-                        {productCards}
+                        {/*{productCards}*/}
+                        <ProductCards />
+
                     </Row>
                 </CardGroup>
             </Container>
