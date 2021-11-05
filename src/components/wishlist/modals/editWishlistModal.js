@@ -1,7 +1,45 @@
-import {Button, Modal} from "react-bootstrap";
-import React from "react";
+import {Button, FormControl, InputGroup, Modal} from "react-bootstrap";
+import React, {useState} from "react";
+
+const {REACT_APP_API_URL} = process.env;
 
 function EditWishlistModal(props) {
+    const id = props.id;
+    const name = props.name;
+    const token = props.token;
+
+    const wishlistsEditEndpoint = REACT_APP_API_URL + "/wishlist/" + id;
+    const [wishlistName, setWishlistName] = useState({"name": name})
+
+    const handleWishlistNameChange = (e) => {
+        setWishlistName({"name": e.target.value});
+    }
+
+    const updateWishlist = (e) => {
+        e.preventDefault(); // prevent the default action
+
+        const request = {
+            method: "PUT",
+            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+            body: JSON.stringify(wishlistName),
+            credentials: "include",
+        };
+
+        fetch(wishlistsEditEndpoint, request)
+            .then((response) => {
+                if (!response.ok) throw new Error(response.data);
+                else return response.json();
+            })
+            .then((data) => {
+                props.onHide();
+                window.location.reload();
+            })
+            .catch((err) => {
+                console.log('err:', err)
+            });
+
+    };
+
   return (
     <Modal
       {...props}
@@ -11,19 +49,17 @@ function EditWishlistModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Edit wishlist modal
+          Редактирование вашего вишлиста `{name}`
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h4>Centered Modal</h4>
-        <p>
-          Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-          dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-          consectetur ac, vestibulum at eros.
-        </p>
+        <InputGroup size="sm" className="mb-3">
+            <InputGroup.Text id="inputGroup-sizing-sm">Введите название</InputGroup.Text>
+            <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder={wishlistName.name} onChange={e => handleWishlistNameChange(e)}/>
+        </InputGroup>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
+        <Button onClick={updateWishlist}>Сохранить</Button>
       </Modal.Footer>
     </Modal>
   );

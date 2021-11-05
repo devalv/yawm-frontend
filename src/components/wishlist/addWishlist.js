@@ -39,7 +39,6 @@ function AddWishlist(props) {
         formYValues.forEach((row) => {
             let url = row.url;
 
-            console.log('url:', url)
             if (url) {
                validUrls.push({"url": url});
             }

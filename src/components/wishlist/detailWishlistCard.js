@@ -89,11 +89,18 @@ function DetailWishlistCard(props) {
                 <EditWishlistModal
                     show={modalEditWishlistShow}
                     onHide={() => setModalEditWishlistShow(false)}
+                    name={wishlistDetail.name}
+                    id={id}
+                    token={token}
                 />
+
                 <AddWishlistProductModal
                     show={modalAddProductShow}
                     onHide={() => setModalAddProductShow(false)}
+                    id={id}
+                    token={token}
                 />
+
                 <EditWishlistProductModal
                     show={modalEditProductShow}
                     onHide={() => setModalEditProductShow(false)}
