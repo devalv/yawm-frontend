@@ -1,10 +1,15 @@
 import {useParams, useHistory} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import DetailProductCard from "./product/detailProductCard";
 import {Button, CardGroup, Container, Row} from "react-bootstrap";
+
+import DetailProductCard from "./product/detailProductCard";
+import EditWishlistModal from "./modals/editWishlistModal";
+import AddWishlistProductModal from "./modals/addProductModal"
+import EditWishlistProductModal from "./product/modals/editProductModal";
 
 
 const {REACT_APP_API_V2_URL, REACT_APP_API_URL} = process.env;
+
 
 function DetailWishlistCard(props) {
     const { id } = useParams();
@@ -15,10 +20,12 @@ function DetailWishlistCard(props) {
     const wishlistDetailEndpoint = REACT_APP_API_V2_URL + "/wishlists/" + id;
     const wishlistDeleteEndpoint = REACT_APP_API_URL + "/wishlist/" + id;
 
-    console.log('Delete endpoint:', wishlistDeleteEndpoint);
-
     const [wishlistDetail, setWishlistDetail] = useState({"name": "", "created_at": "", "user_id": "", "products": []});
     const [productCards, setProductCards] = useState([]);
+
+    const [modalEditWishlistShow, setModalEditWishlistShow] = React.useState(false);
+    const [modalAddProductShow, setModalAddProductShow] = React.useState(false);
+    const [modalEditProductShow, setModalEditProductShow] = React.useState(false);
 
     const setProducts = (products) => {
         const productComponents = [];
@@ -75,7 +82,22 @@ function DetailWishlistCard(props) {
             <>
                 <h1>Ваш вишлист `{wishlistDetail.name}` был создан: `{wishlistDetail.created_at}` и состоит из
                     `{wishlistDetail.products.length}` продуктов.</h1>
+                <Button variant="primary" onClick={() => setModalAddProductShow(true)}>Добавить позицию</Button>
+                <Button variant="success" onClick={() => setModalEditWishlistShow(true)}>Сменить название</Button>
                 <Button variant="danger" onClick={deleteWishlist}>Удалить</Button>
+
+                <EditWishlistModal
+                    show={modalEditWishlistShow}
+                    onHide={() => setModalEditWishlistShow(false)}
+                />
+                <AddWishlistProductModal
+                    show={modalAddProductShow}
+                    onHide={() => setModalAddProductShow(false)}
+                />
+                <EditWishlistProductModal
+                    show={modalEditProductShow}
+                    onHide={() => setModalEditProductShow(false)}
+                />
             </>
             )
        }
