@@ -73,6 +73,10 @@ function DetailProductCard(props) {
                 <Button variant="warning" onClick={() => setModalEditProductShow(true)}>Редактировать</Button>
                 <Button variant="danger" onClick={deleteProduct}>Удалить</Button>
                 <EditWishlistProductModal
+                    token={token}
+                    id={id}
+                    substitutable={substitutable}
+                    reserved={reserved}
                     show={modalEditProductShow}
                     onHide={() => setModalEditProductShow(false)}
                 />
