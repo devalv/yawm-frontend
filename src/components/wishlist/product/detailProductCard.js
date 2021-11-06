@@ -10,8 +10,12 @@ function DetailProductCard(props) {
     const url = props.product.url;
     const name = props.product.name;
     const id = props.product.id;
-    const created_at = props.product.created_at;
-    const updated_at = props.product.updated_at;
+    // TODO: @devalv proper dates is here!
+    const createdAt = (props.product.created_at) ? new Date(props.product.created_at): null;
+    const createdAtStr = createdAt.toLocaleString("ru")
+
+    console.log(createdAt)
+
     const substitutable = props.product.substitutable;
     const reserved = props.product.reserved;
     const card_bg = (reserved) ? "secondary": "success";
@@ -94,13 +98,10 @@ function DetailProductCard(props) {
                 <Card.Body>
                     <Card.Title>{name}</Card.Title>
                     <Card.Text>
-                        Created at: {created_at}
+                        Создан: {createdAtStr}
                         <br/>
-                        Updated at: {updated_at}
+                        Заменяем: {(substitutable)? "да": "нет"}
                         <br/>
-                        Substitutable: {substitutable}
-                        <br/>
-                        Reserved: {reserved}
                     </Card.Text>
                     <Card.Link href={url}>Посмотреть товар</Card.Link>
                     <br/>
