@@ -19,7 +19,7 @@ function NavbarC(props) {
                 <NavDropdown.Divider/>
                 <NavDropdown.Item onClick={props.logoutUser}>
                     <PersonX/>
-                    &nbsp;Log out
+                    &nbsp;Выйти
                 </NavDropdown.Item>
             </>)
         }
@@ -29,7 +29,7 @@ function NavbarC(props) {
             <>
                 <NavDropdown.Item onClick={props.loginUser}>
                     <Person/>
-                    &nbsp;Log in
+                    &nbsp;Войти
                 </NavDropdown.Item>
              </>
        )
@@ -52,7 +52,7 @@ function NavbarC(props) {
                     </NavbarBrand>
                     <NavbarToggle/>
                     <NavbarCollapse className="justify-content-end">
-                        <NavDropdown title="Profile" id="ProfileNav">
+                        <NavDropdown title="Профиль" id="ProfileNav">
                             <NavProfile />
                         </NavDropdown>
                         <Nav.Link href="https://github.com/devalv/yawm-frontend">

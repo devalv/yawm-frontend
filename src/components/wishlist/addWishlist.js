@@ -109,7 +109,7 @@ function AddWishlist(props) {
             <Modal.Header>
                 <Modal.Title>Вставьте ссылки на карточки товара:</Modal.Title>
                 <Button variant="secondary" onClick={modalClose}>
-                    Cancel
+                    Закрыть
                 </Button>
             </Modal.Header>
             <Modal.Body>

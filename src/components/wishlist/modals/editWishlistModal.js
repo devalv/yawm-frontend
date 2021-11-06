@@ -47,7 +47,7 @@ function EditWishlistModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header closeButton>
+      <Modal.Header closeButton closeLabel="Закрыть">
         <Modal.Title id="contained-modal-title-vcenter">
           Редактирование вашего вишлиста `{name}`
         </Modal.Title>
