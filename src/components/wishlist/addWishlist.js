@@ -1,4 +1,4 @@
-import {Button, Form, Modal} from "react-bootstrap";
+import {Button, Form, Modal, Spinner} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 
 const {REACT_APP_API_V2_URL} = process.env;
@@ -11,6 +11,7 @@ function AddWishlist(props) {
     const [productInputs, setProductInputs] = useState([])
     // TODO: @devalv оставить только formYValues?
     const [formYValues, setFormYValues] = useState([])
+    const [loading, setLoading] = useState(false)
 
     const handleYChange = (i, e) => {
         setFormYValues([...formYValues, {"url": e.target.value}]);
@@ -32,6 +33,7 @@ function AddWishlist(props) {
         setProductInputs([]);
         setFormYValues([]);
         props.handleClose();
+        setLoading(false);
     }
 
     const validateForm = () => {
@@ -45,6 +47,15 @@ function AddWishlist(props) {
         });
         setFormYValues(validUrls)
     }
+
+
+    const toggleLoader = () => {
+    if (!loading) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  };
 
     const createWishlist = (e) => {
         e.preventDefault(); // prevent the default action
@@ -83,7 +94,7 @@ function AddWishlist(props) {
                         onChange={e => handleYChange(index, e)}
                     />
                     <Form.Text className="text-muted">
-                        Product url must be a unique value.
+                        В строке должен быть только 1 товар
                     </Form.Text>
                 </Form.Group>
             </>
@@ -103,7 +114,7 @@ function AddWishlist(props) {
     return (
         <Modal show={props.show} onHide={props.handleClose}>
             <Modal.Header>
-                <Modal.Title>Insert product urls:</Modal.Title>
+                <Modal.Title>Вставьте ссылки на карточки товара:</Modal.Title>
                 <Button variant="secondary" onClick={modalClose}>
                     Cancel
                 </Button>
@@ -111,14 +122,20 @@ function AddWishlist(props) {
             <Modal.Body>
                 <Form onSubmit={createWishlist}>
                     {tierInputs}
-
                     <hr />
                     <Button className="addMoreBtn" onClick={addProductLine}>
-                        +Add Product
+                        Добавить
                     </Button>
                     <hr />
-                    <Button variant="primary" type="submit">
-                        Next
+                    <Button variant="success" type="submit" onClick={() => toggleLoader()}>
+                        {loading ? <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                        /> : ""}
+                        Создать
                     </Button>
                 </Form>
             </Modal.Body>
