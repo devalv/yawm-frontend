@@ -12,7 +12,7 @@ function Wishlist() {
 
     const [authContext] = useContext(AuthContext);
     const {REACT_APP_API_URL} = process.env;
-    const producerWishlistEndpoint = REACT_APP_API_URL + "/wishlist/";
+    const producerWishlistEndpoint = REACT_APP_API_URL + "/wishlist";
 
     const [wishlists, setWishlist] = useState([]);
 

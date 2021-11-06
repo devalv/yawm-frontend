@@ -66,7 +66,7 @@ function DetailProductCard(props) {
         {
             return (
             <>
-                <Button variant="primary" onClick={reserveProduct}>Reserve</Button>
+                <Button variant="primary" onClick={reserveProduct}>Забронировать</Button>
             </>
        )
        }
