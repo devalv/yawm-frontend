@@ -1,4 +1,4 @@
-import {Button, FormCheck, FormGroup, Modal, InputGroup} from "react-bootstrap";
+import {Button, FormCheck, FormGroup, Modal} from "react-bootstrap";
 import React, {useState} from "react";
 
 const {REACT_APP_API_V2_URL} = process.env;
@@ -51,9 +51,6 @@ function EditWishlistProductModal(props) {
       </Modal.Header>
       <Modal.Body>
         <FormGroup size="sm" className="mb-3">
-            {/*<InputGroup.Text id="inputGroup-sizing-sm">Введите название</InputGroup.Text>*/}
-            {/*<FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder={props.substitutable} onChange={e => handleWishlistNameChange(e)}/>*/}
-            {/*<FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder={props.substitutable} />*/}
             <FormCheck type="switch" label="Резервирован" id="reserved-switch" checked={reserved} onChange={() => setProductReserved((!reserved))}/>
             <FormCheck type="switch" label="Заменяем" id="substitutable-switch" checked={substitutable} onChange={() => setProductSubstitutable((!substitutable))}/>
         </FormGroup>

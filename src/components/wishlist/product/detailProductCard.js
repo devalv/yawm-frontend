@@ -18,7 +18,7 @@ function DetailProductCard(props) {
 
     const substitutable = props.product.substitutable;
     const reserved = props.product.reserved;
-    const card_bg = (reserved) ? "secondary": "success";
+    const card_bg = (reserved) ? "secondary": "";
 
     const [modalEditProductShow, setModalEditProductShow] = React.useState(false);
 

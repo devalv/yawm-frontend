@@ -22,13 +22,6 @@ function AddWishlist(props) {
         setFormYValues([...formYValues, {}]);
     }
 
-    const removeFormFields = (i) => {
-        let newFormValues = [...formYValues];
-        newFormValues.splice(i, 1);
-        setFormYValues(newFormValues)
-    }
-
-
     const modalClose = () => {
         setProductInputs([]);
         setFormYValues([]);

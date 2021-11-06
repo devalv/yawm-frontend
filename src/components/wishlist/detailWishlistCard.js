@@ -1,6 +1,6 @@
 import {useParams, useHistory} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {Button, CardGroup, Container, Row} from "react-bootstrap";
+import {Button, CardGroup, Col, Container, Row} from "react-bootstrap";
 
 import DetailProductCard from "./product/detailProductCard";
 import EditWishlistModal from "./modals/editWishlistModal";
@@ -20,6 +20,8 @@ function DetailWishlistCard(props) {
 
     const [wishlistDetail, setWishlistDetail] = useState({"name": "", "created_at": "", "user_id": "", "products": []});
     const [products, setProducts] = useState([]);
+    const createdAt = (wishlistDetail.created_at) ? new Date(wishlistDetail.created_at): null;
+    const createdAtStr = (createdAt) ? createdAt.toLocaleString("ru"): ""
 
     const [modalEditWishlistShow, setModalEditWishlistShow] = React.useState(false);
     const [modalAddProductShow, setModalAddProductShow] = React.useState(false);
@@ -29,7 +31,7 @@ function DetailWishlistCard(props) {
         const productsData = products;
         let productComponents = [];
         productsData.forEach((product) => {
-            productComponents.push(<DetailProductCard product={product} key={product.id} token={token} owner={(userId === wishlistDetail.user_id) ? true: false}/>);
+            productComponents.push(<Col md="auto" className="border rounded" key={product.id}><DetailProductCard product={product} token={token} owner={(userId === wishlistDetail.user_id) ? true: false}/></Col>);
         });
         return (
             <>{productComponents}</>
@@ -57,7 +59,7 @@ function DetailWishlistCard(props) {
         };
 
         getWishlistInfo();
-    }, [])
+    }, [wishlistDetailEndpoint])
 
     const deleteWishlist = () => {
         const request = {
@@ -81,8 +83,7 @@ function DetailWishlistCard(props) {
         {
             return (
             <>
-                <h1>Ваш вишлист `{wishlistDetail.name}` был создан: `{wishlistDetail.created_at}` и состоит из
-                    `{wishlistDetail.products.length}` продуктов.</h1>
+                <h1>Ваш вишлист `{wishlistDetail.name}` от {createdAtStr}.</h1>
                 <Button variant="primary" onClick={() => setModalAddProductShow(true)}>Добавить позицию</Button>
                 <Button variant="success" onClick={() => setModalEditWishlistShow(true)}>Сменить название</Button>
                 <Button variant="danger" onClick={deleteWishlist}>Удалить</Button>
@@ -108,8 +109,7 @@ function DetailWishlistCard(props) {
         else {
             return (
             <>
-                <h1>Вишлист `{wishlistDetail.name}` был создан `{wishlistDetail.username}`: `{wishlistDetail.created_at}` и состоит из
-                    `{wishlistDetail.products.length}` продуктов.</h1>
+                <h1>Вишлист `{wishlistDetail.name}` от {createdAtStr}.</h1>
             </>
             )
         }
@@ -125,9 +125,7 @@ function DetailWishlistCard(props) {
             <Container>
                 <CardGroup>
                     <Row xs={1} md={3} xxl={4} className="g-4">
-                        {/*{productCards}*/}
                         <ProductCards />
-
                     </Row>
                 </CardGroup>
             </Container>
