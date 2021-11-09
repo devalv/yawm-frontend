@@ -59,6 +59,7 @@ function App() {
                     <Wishlist/>
                 </Route>
                 <Route path="/wishlist/:id" children={<DetailWishlistCard userId={AuthState.user_id} token={AuthState.token}/>} />
+                <Route path="/:page" children={<Wishlist />} />
             </Switch>
         </AuthContext.Provider>
     </Router>

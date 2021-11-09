@@ -2,25 +2,40 @@ import React, {useState, useEffect, useContext} from "react";
 import {
     Card,
     CardGroup, Col,
-    Container,
+    Container, Pagination, Row,
 } from "react-bootstrap";
 import {AuthContext} from "../auth/authContext";
 import AddWishlist from "./addWishlist";
+import {useParams} from "react-router-dom";
 
 
 function Wishlist() {
+    const { page } = useParams();
 
     const [authContext] = useContext(AuthContext);
     const {REACT_APP_API_URL} = process.env;
-    const producerWishlistEndpoint = REACT_APP_API_URL + "/wishlist";
+    const producerWishlistEndpoint = (page)? REACT_APP_API_URL + "/wishlist" + "?size=9&page=" + page: REACT_APP_API_URL + "/wishlist?size=9";
 
     const [wishlists, setWishlist] = useState([]);
+    const [paginationInfo, setPaginationInfo] = useState({"next": null, "prev": null})
 
     // modal
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
+
+    const extractPaginationPages = (paginationLinks) => {
+        console.log('Pagination Links:', paginationLinks)
+        // (?<=\?size\=9\&page\=).*
+        // const first_link = (paginationLinks.self)?paginationLinks.first.match(/(?<=\?size=9&page=).*/)[0]:null;
+        // const last_link = (paginationLinks.self)?paginationLinks.last.match(/(?<=\?size=9&page=).*/)[0]:null;
+        const show_prev = paginationLinks.first !== paginationLinks.self;
+        const show_next = paginationLinks.last !== paginationLinks.self;
+        const prev_link = (paginationLinks.prev)?paginationLinks.prev.match(/(?<=\?size=9&page=).*/)[0]:null;
+        const next_link = (paginationLinks.next)?paginationLinks.next.match(/(?<=\?size=9&page=).*/)[0]:null;
+        setPaginationInfo({"next": next_link, "prev": prev_link, "show_prev": show_prev, "show_next": show_next});
+    }
 
     const new_wishlist_card_button = () => {
 
@@ -41,8 +56,38 @@ function Wishlist() {
         }
     }
 
+    const pagination_navigation = () => {
+        // TODO: @devalv rename
+        let prev_btn = ''
+        let next_btn = ''
+        if (paginationInfo.prev || paginationInfo.next)
+        {
+            if (paginationInfo.prev && paginationInfo.show_prev)
+                {
+                    prev_btn = <Pagination.Prev href={paginationInfo.prev}/>
+                }
+            if (paginationInfo.next && paginationInfo.show_next)
+                {
+                    next_btn = <Pagination.Next href={paginationInfo.next}/>
+                }
+
+            return (
+                <>
+                    <Pagination>
+                        {prev_btn}
+                        {next_btn}
+                    </Pagination>
+                </>
+            )
+        }
+
+    }
+
     useEffect(() => {
+        setPaginationInfo({"next": null, "prev": null, "show_prev": null, "show_next": null});
+
         const getWishlists = () => {
+            console.log('page in get is:', page)
             const request = {
                 method: "GET",
                 credentials: "include",
@@ -55,12 +100,14 @@ function Wishlist() {
                 })
                 .then((data) => {
                     setWishlist(data.items);
+                    extractPaginationPages(data.links);
                 })
                 .catch((err) => {
                 });
         };
 
         getWishlists();
+
 
     }, [producerWishlistEndpoint])
 
@@ -69,7 +116,6 @@ function Wishlist() {
         <AddWishlist show={show} handleClose={handleClose} token={authContext.token}/>
         <Container>
             <CardGroup>
-                {/*<Row className="justify-content-md-center">*/}
                     <Col md="auto" className="border rounded">
                         {new_wishlist_card_button()}
                     </Col>
@@ -86,8 +132,17 @@ function Wishlist() {
                         </a>
                         </Col>
                     ))}
-                {/*</Row>*/}
             </CardGroup>
+        </Container>
+        <hr />
+        <Container>
+
+            <div className="d-flex justify-content-center">
+                <Row className="my-auto text-center">
+                    {pagination_navigation()}
+                </Row>
+            </div>
+
         </Container>
     </>
     );
