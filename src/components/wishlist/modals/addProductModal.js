@@ -11,7 +11,14 @@ function AddWishlistProductModal(props) {
     const [productUrls, setProductUrls] = useState([])
 
     const handleProductUrlsChange = (i, e) => {
-        setProductUrls([{"url": e.target.value}]);
+        if (e.target.value){
+            const url = e.target.value.replaceAll("#", "");
+            setProductUrls([{"url": url}]);
+        }
+        else {
+            console.log('there is no url!')
+        }
+
     }
 
     const addWishlistProducts = (e) => {

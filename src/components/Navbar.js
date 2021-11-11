@@ -61,6 +61,7 @@ function NavbarC(props) {
                     </NavbarCollapse>
                 </Container>
             </Navbar>
+            <br/><br/>
         </>
         );
 }

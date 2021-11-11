@@ -33,12 +33,12 @@ function AddWishlist(props) {
         const validUrls = []
         formYValues.forEach((row) => {
             let url = row.url;
-
             if (url) {
-               validUrls.push({"url": url});
+                url = url.replaceAll("#", "");
+                validUrls.push({"url": url});
             }
         });
-        setFormYValues(validUrls)
+        return validUrls
     }
 
 
@@ -53,12 +53,12 @@ function AddWishlist(props) {
     const createWishlist = (e) => {
         e.preventDefault(); // prevent the default action
 
-        validateForm()
+        const validatedUrls = validateForm()
 
         const request = {
             method: "POST",
             headers: {"Content-Type": "application/json", "Authorization": "Bearer " + props.token},
-            body: JSON.stringify({product_urls: formYValues}),
+            body: JSON.stringify({product_urls: validatedUrls}),
             credentials: "include",
         };
 
