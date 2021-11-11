@@ -26,10 +26,7 @@ function Wishlist() {
 
 
     const extractPaginationPages = (paginationLinks) => {
-        console.log('Pagination Links:', paginationLinks)
         // (?<=\?size\=9\&page\=).*
-        // const first_link = (paginationLinks.self)?paginationLinks.first.match(/(?<=\?size=9&page=).*/)[0]:null;
-        // const last_link = (paginationLinks.self)?paginationLinks.last.match(/(?<=\?size=9&page=).*/)[0]:null;
         const show_prev = paginationLinks.first !== paginationLinks.self;
         const show_next = paginationLinks.last !== paginationLinks.self;
         const prev_link = (paginationLinks.prev)?paginationLinks.prev.match(/(?<=\?size=9&page=).*/)[0]:null;
@@ -87,7 +84,6 @@ function Wishlist() {
         setPaginationInfo({"next": null, "prev": null, "show_prev": null, "show_next": null});
 
         const getWishlists = () => {
-            console.log('page in get is:', page)
             const request = {
                 method: "GET",
                 credentials: "include",

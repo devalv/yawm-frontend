@@ -10,8 +10,10 @@ import Authentication from "./auth/Authentication";
 import Wishlist  from "./wishlist/List";
 import DetailWishlistCard from "./wishlist/detailWishlistCard";
 import NavbarC from "./Navbar";
+import {useHealthCheck} from "@webscopeio/react-health-check";
+import {Modal} from "react-bootstrap";
 
-const {REACT_APP_API_URL} = process.env;
+const {REACT_APP_API_URL, REACT_APP_HEALTH_URL} = process.env;
 
 function App() {
 
@@ -46,12 +48,25 @@ function App() {
         window.location.reload();
     }
 
-    return (
-    <Router>
+    const { available } = useHealthCheck({
+        service: {
+            name: 'auth',
+            url: REACT_APP_HEALTH_URL,
+        },
+        onSuccess: ({ service, timestamp }) => {
+            console.log(`Service "${service.name}" is available since "${timestamp}" 🎉`);
+        },
+        onError: ({ service, timestamp }) => {
+            console.log(`Service "${service.name}" is not available since "${timestamp}" 😔`);
+        },
+    });
+
+    function Greeting(props) {
+        const backendAvailable = props.available;
+        if (backendAvailable) {
+            return (
         <AuthContext.Provider value={[AuthState, setAuthState]}>
-
             <Authentication logoutUser={logout} loginUser={login}/>
-
             <NavbarC authenticated={AuthState.authenticated} username={AuthState.username} logoutUser={backendLogout} loginUser={login}/>
             <br/><br/>
             <Switch>
@@ -62,6 +77,21 @@ function App() {
                 <Route path="/:page" children={<Wishlist />} />
             </Switch>
         </AuthContext.Provider>
+            )
+        }
+        else {
+            return (
+           <Modal show={true} backdrop="static" keyboard={false}>
+               <Modal.Title>Сервис временно недоступен</Modal.Title>
+           </Modal>
+            )
+        }
+
+    }
+
+    return (
+    <Router>
+        <Greeting available={available} />
     </Router>
     );
 }
