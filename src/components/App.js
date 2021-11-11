@@ -59,16 +59,33 @@ function App() {
         onError: ({ service, timestamp }) => {
             console.log(`Service "${service.name}" is not available since "${timestamp}" 😔`);
         },
+        refreshInterval: 9000
     });
 
     function Greeting(props) {
         const backendAvailable = props.available;
         if (backendAvailable) {
             return (
+            <></>
+            )
+        }
+        else {
+            return (
+            <>
+           <Modal show={true} backdrop="static" keyboard={false}>
+               <Modal.Title><center>Сервис временно недоступен</center></Modal.Title>
+           </Modal>
+            </>
+            )
+        }
+    }
+
+    return (
+    <Router>
         <AuthContext.Provider value={[AuthState, setAuthState]}>
+            <Greeting available={available} />
             <Authentication logoutUser={logout} loginUser={login}/>
             <NavbarC authenticated={AuthState.authenticated} username={AuthState.username} logoutUser={backendLogout} loginUser={login}/>
-            <br/><br/>
             <Switch>
                 <Route exact path="/">
                     <Wishlist/>
@@ -77,21 +94,6 @@ function App() {
                 <Route path="/:page" children={<Wishlist />} />
             </Switch>
         </AuthContext.Provider>
-            )
-        }
-        else {
-            return (
-           <Modal show={true} backdrop="static" keyboard={false}>
-               <Modal.Title>Сервис временно недоступен</Modal.Title>
-           </Modal>
-            )
-        }
-
-    }
-
-    return (
-    <Router>
-        <Greeting available={available} />
     </Router>
     );
 }
