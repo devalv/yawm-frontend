@@ -12,6 +12,7 @@ import DetailWishlistCard from "./wishlist/detailWishlistCard";
 import NavbarC from "./Navbar";
 import {useHealthCheck} from "@webscopeio/react-health-check";
 import {Modal} from "react-bootstrap";
+import {useTitle} from "./Title";
 
 const {REACT_APP_API_URL, REACT_APP_HEALTH_URL} = process.env;
 
@@ -79,6 +80,8 @@ function App() {
             )
         }
     }
+
+    useTitle('YAWM');
 
     return (
     <Router>
