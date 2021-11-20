@@ -6,7 +6,7 @@ const {REACT_APP_API_V2_URL} = process.env;
 function AddWishlist(props) {
 
     // TODO: @devalv move to env
-    const wishlistsEndpointV2 = REACT_APP_API_V2_URL + "/wishlists/";
+    const wishlistsEndpointV2 = REACT_APP_API_V2_URL + "/wishlists";
 
     const [productInputs, setProductInputs] = useState([])
     // TODO: @devalv оставить только formYValues?
