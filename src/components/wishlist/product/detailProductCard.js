@@ -6,7 +6,6 @@ const {REACT_APP_API_V2_URL} = process.env;
 
 function DetailProductCard(props) {
     const owner = props.owner;
-    const token = props.token;
     const url = props.product.url;
     const name = props.product.name;
     const id = props.product.id;
@@ -26,7 +25,6 @@ function DetailProductCard(props) {
         const productReserveEndpoint = REACT_APP_API_V2_URL + '/wishlist-products/' + id  + '/reserve';
         const request = {
             method: "PUT",
-            headers: {"Content-Type": "application/json"},
             credentials: "include",
         };
         fetch(productReserveEndpoint, request)
@@ -48,7 +46,6 @@ function DetailProductCard(props) {
         const productDeleteEndpoint = REACT_APP_API_V2_URL + '/wishlist-products/' + id;
         const request = {
             method: "DELETE",
-            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
             credentials: "include",
         };
         fetch(productDeleteEndpoint, request)
@@ -77,7 +74,6 @@ function DetailProductCard(props) {
                 <Button variant="warning" onClick={() => setModalEditProductShow(true)}>Редактировать</Button>
                 <Button variant="danger" onClick={deleteProduct}>Удалить</Button>
                 <EditWishlistProductModal
-                    token={token}
                     id={id}
                     substitutable={substitutable}
                     reserved={reserved}

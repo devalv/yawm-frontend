@@ -4,7 +4,7 @@ import {
     CardGroup, Col,
     Container, Pagination, Row,
 } from "react-bootstrap";
-import {AuthContext} from "../auth/authContext";
+import {AuthContext} from "../auth/auth-context";
 import AddWishlist from "./addWishlist";
 import {useParams} from "react-router-dom";
 
@@ -13,8 +13,8 @@ function Wishlist() {
     const { page } = useParams();
 
     const [authContext] = useContext(AuthContext);
-    const {REACT_APP_API_URL} = process.env;
-    const producerWishlistEndpoint = (page)? REACT_APP_API_URL + "/wishlist" + "?size=9&page=" + page: REACT_APP_API_URL + "/wishlist?size=9";
+    const {REACT_APP_API_V1_URL} = process.env;
+    const producerWishlistEndpoint = (page)? REACT_APP_API_V1_URL + "/wishlist" + "?size=9&page=" + page: REACT_APP_API_V1_URL + "/wishlist?size=9";
 
     const [wishlists, setWishlist] = useState([]);
     const [paginationInfo, setPaginationInfo] = useState({"next": null, "prev": null})
@@ -109,7 +109,7 @@ function Wishlist() {
 
     return (
     <>
-        <AddWishlist show={show} handleClose={handleClose} token={authContext.token}/>
+        <AddWishlist show={show} handleClose={handleClose}/>
         <Container>
             <CardGroup>
                     <Col md="auto" className="border rounded">

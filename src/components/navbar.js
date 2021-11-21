@@ -3,6 +3,7 @@ import NavbarToggle from "react-bootstrap/NavbarToggle";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 import {Github, Person, PersonFill, PersonX} from "react-bootstrap-icons";
 import React from "react";
+import {backendLogout, login} from "./auth/authentication";
 
 
 function NavbarC(props) {
@@ -17,7 +18,7 @@ function NavbarC(props) {
                     &nbsp;{props.username}
                 </NavDropdown.Item>
                 <NavDropdown.Divider/>
-                <NavDropdown.Item onClick={props.logoutUser}>
+                <NavDropdown.Item onClick={backendLogout}>
                     <PersonX/>
                     &nbsp;Выйти
                 </NavDropdown.Item>
@@ -27,7 +28,7 @@ function NavbarC(props) {
         {
             return (
             <>
-                <NavDropdown.Item onClick={props.loginUser}>
+                <NavDropdown.Item onClick={login}>
                     <Person/>
                     &nbsp;Войти
                 </NavDropdown.Item>

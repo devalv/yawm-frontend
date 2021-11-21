@@ -6,17 +6,16 @@ import DetailProductCard from "./product/detailProductCard";
 import EditWishlistModal from "./modals/editWishlistModal";
 import AddWishlistProductModal from "./modals/addProductModal"
 
-const {REACT_APP_API_V2_URL, REACT_APP_API_URL} = process.env;
+const {REACT_APP_API_V2_URL, REACT_APP_API_V1_URL} = process.env;
 
 
 function DetailWishlistCard(props) {
     const { id } = useParams();
     const history = useHistory();
     const userId = props.userId;
-    const token = props.token;
 
     const wishlistDetailEndpoint = REACT_APP_API_V2_URL + "/wishlists/" + id;
-    const wishlistDeleteEndpoint = REACT_APP_API_URL + "/wishlist/" + id;
+    const wishlistDeleteEndpoint = REACT_APP_API_V1_URL + "/wishlist/" + id;
 
     const [wishlistDetail, setWishlistDetail] = useState({"name": "", "created_at": "", "user_id": "", "products": []});
     const [products, setProducts] = useState([]);
@@ -31,7 +30,7 @@ function DetailWishlistCard(props) {
         const productsData = products;
         let productComponents = [];
         productsData.forEach((product) => {
-            productComponents.push(<Col md="auto" className="border rounded" key={product.id}><DetailProductCard product={product} token={token} owner={(userId === wishlistDetail.user_id) ? true: false}/></Col>);
+            productComponents.push(<Col md="auto" className="border rounded" key={product.id}><DetailProductCard product={product} owner={(userId === wishlistDetail.user_id) ? true: false}/></Col>);
         });
         return (
             <>{productComponents}</>
@@ -39,7 +38,8 @@ function DetailWishlistCard(props) {
     }
 
     useEffect(() => {
-        const getWishlistInfo = () => {
+        const getWishlistInfo = async () => {
+
             const request = {
                 method: "GET",
                 credentials: "include",
@@ -64,7 +64,6 @@ function DetailWishlistCard(props) {
     const deleteWishlist = () => {
         const request = {
             method: "DELETE",
-            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
             credentials: "include",
         };
         fetch(wishlistDeleteEndpoint, request)
@@ -93,14 +92,12 @@ function DetailWishlistCard(props) {
                     onHide={() => setModalEditWishlistShow(false)}
                     name={wishlistDetail.name}
                     id={id}
-                    token={token}
                 />
 
                 <AddWishlistProductModal
                     show={modalAddProductShow}
                     onHide={() => setModalAddProductShow(false)}
                     id={id}
-                    token={token}
                 />
 
             </>

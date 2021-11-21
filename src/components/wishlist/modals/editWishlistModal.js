@@ -1,14 +1,13 @@
 import {Button, FormControl, InputGroup, Modal} from "react-bootstrap";
 import React, {useState} from "react";
 
-const {REACT_APP_API_URL} = process.env;
+const {REACT_APP_API_V1_URL} = process.env;
 
 function EditWishlistModal(props) {
     const id = props.id;
     const name = props.name;
-    const token = props.token;
 
-    const wishlistsEditEndpoint = REACT_APP_API_URL + "/wishlist/" + id;
+    const wishlistsEditEndpoint = REACT_APP_API_V1_URL + "/wishlist/" + id;
     const [wishlistName, setWishlistName] = useState({"name": name})
 
     const handleWishlistNameChange = (e) => {
@@ -20,7 +19,6 @@ function EditWishlistModal(props) {
 
         const request = {
             method: "PUT",
-            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
             body: JSON.stringify(wishlistName),
             credentials: "include",
         };

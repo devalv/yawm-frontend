@@ -57,7 +57,6 @@ function AddWishlist(props) {
 
         const request = {
             method: "POST",
-            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + props.token},
             body: JSON.stringify({product_urls: validatedUrls}),
             credentials: "include",
         };

@@ -5,7 +5,6 @@ const {REACT_APP_API_V2_URL} = process.env;
 
 function AddWishlistProductModal(props) {
     const id = props.id;
-    const token = props.token;
 
     const wishlistsAddProductEndpoint = REACT_APP_API_V2_URL + "/wishlists/" + id + "/products-add";
     const [productUrls, setProductUrls] = useState([])
@@ -26,7 +25,6 @@ function AddWishlistProductModal(props) {
 
         const request = {
             method: "PUT",
-            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
             body: JSON.stringify({"product_urls": productUrls}),
             credentials: "include",
         };

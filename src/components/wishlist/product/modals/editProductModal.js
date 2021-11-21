@@ -5,7 +5,6 @@ const {REACT_APP_API_V2_URL} = process.env;
 
 function EditWishlistProductModal(props) {
     const id = props.id;
-    const token = props.token;
 
     const productEditEndpoint = REACT_APP_API_V2_URL + "/wishlist-products/" + id;
     const [substitutable, setProductSubstitutable] = useState(props.substitutable)
@@ -17,7 +16,6 @@ function EditWishlistProductModal(props) {
 
         const request = {
             method: "PUT",
-            headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
             body: JSON.stringify(productInfo),
             credentials: "include",
         };
