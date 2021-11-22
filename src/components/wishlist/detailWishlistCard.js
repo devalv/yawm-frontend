@@ -5,6 +5,7 @@ import {Button, CardGroup, Col, Container, Row} from "react-bootstrap";
 import DetailProductCard from "./product/detailProductCard";
 import EditWishlistModal from "./modals/editWishlistModal";
 import AddWishlistProductModal from "./modals/addProductModal"
+import axios from "axios";
 
 const {REACT_APP_API_V2_URL, REACT_APP_API_V1_URL} = process.env;
 
@@ -39,41 +40,31 @@ function DetailWishlistCard(props) {
 
     useEffect(() => {
         const getWishlistInfo = async () => {
-
-            const request = {
-                method: "GET",
-                credentials: "include",
-            };
-
-            fetch(wishlistDetailEndpoint, request)
-                .then((response) => {
-                    if (!response.ok) throw new Error(response.data);
-                    else return response.json();
-                })
-                .then((data) => {
-                    setWishlistDetail(data);
-                    setProducts(data.products);
-                })
-                .catch((err) => {
-                });
+            try {
+                await axios.get(wishlistDetailEndpoint)
+                    .then(function (response) {
+                        setWishlistDetail(response.data);
+                        setProducts(response.data.products);
+                    })
+            }
+            catch (err) {
+                console.error(err.message);
+            }
         };
 
         getWishlistInfo();
     }, [wishlistDetailEndpoint])
 
-    const deleteWishlist = () => {
-        const request = {
-            method: "DELETE",
-            credentials: "include",
-        };
-        fetch(wishlistDeleteEndpoint, request)
-                .then((response) => {
-                    if (!response.ok) throw new Error(response.data);
-                    else history.push("/");
-                })
-                .catch((err) => {
-                    console.log('err:', err)
-        });
+    const deleteWishlist = async () => {
+        try {
+                await axios.delete(wishlistDeleteEndpoint)
+                    .then(function (response) {
+                        history.push("/");
+                    })
+            }
+        catch (err) {
+            console.error(err.message);
+        }
     }
 
     function WishlistDetails() {

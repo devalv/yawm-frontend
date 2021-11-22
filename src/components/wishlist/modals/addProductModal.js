@@ -1,5 +1,6 @@
 import {Button, FormControl, InputGroup, Modal} from "react-bootstrap";
 import React, {useState} from "react";
+import axios from "axios";
 
 const {REACT_APP_API_V2_URL} = process.env;
 
@@ -20,28 +21,18 @@ function AddWishlistProductModal(props) {
 
     }
 
-    const addWishlistProducts = (e) => {
+    const addWishlistProducts = async (e) => {
         e.preventDefault(); // prevent the default action
-
-        const request = {
-            method: "PUT",
-            body: JSON.stringify({"product_urls": productUrls}),
-            credentials: "include",
-        };
-
-        fetch(wishlistsAddProductEndpoint, request)
-            .then((response) => {
-                if (!response.ok) throw new Error(response.data);
-                else return response.json();
-            })
-            .then((data) => {
+        try {
+            await axios.put(wishlistsAddProductEndpoint, {"product_urls": productUrls})
+            .then(function (response) {
                 props.onHide();
                 window.location.reload();
             })
-            .catch((err) => {
-                console.log('err:', err)
-            });
-
+        }
+        catch (err) {
+            console.error(err.message);
+        }
     };
 
     return (

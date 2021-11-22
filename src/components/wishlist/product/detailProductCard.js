@@ -1,6 +1,7 @@
 import {Button, Card} from "react-bootstrap";
 import React from "react";
 import EditWishlistProductModal from "./modals/editProductModal";
+import axios from "axios";
 
 const {REACT_APP_API_V2_URL} = process.env;
 
@@ -21,41 +22,30 @@ function DetailProductCard(props) {
 
     const [modalEditProductShow, setModalEditProductShow] = React.useState(false);
 
-    const reserveProduct = () => {
+    const reserveProduct = async () => {
         const productReserveEndpoint = REACT_APP_API_V2_URL + '/wishlist-products/' + id  + '/reserve';
-        const request = {
-            method: "PUT",
-            credentials: "include",
-        };
-        fetch(productReserveEndpoint, request)
-            .then((response) => {
-                if (!response.ok) throw new Error(response.data);
-                else return response.json();
-            })
-            .then((data) => {
-                props.handleClose();
+        try {
+            await axios.put(productReserveEndpoint)
+            .then(function (response) {
                 window.location.reload();
             })
-            .catch((err) => {
-                console.log('err:', err)
-            });
-        window.location.reload();
+        }
+        catch (err) {
+            console.error(err.message);
+        }
     }
 
-    const deleteProduct = () => {
+    const deleteProduct = async () => {
         const productDeleteEndpoint = REACT_APP_API_V2_URL + '/wishlist-products/' + id;
-        const request = {
-            method: "DELETE",
-            credentials: "include",
-        };
-        fetch(productDeleteEndpoint, request)
-                .then((response) => {
-                    if (!response.ok) throw new Error(response.data);
-                    else window.location.reload()
-                })
-                .catch((err) => {
-                    console.log('err:', err)
-        });
+        try {
+            await axios.delete(productDeleteEndpoint)
+            .then(function (response) {
+                window.location.reload();
+            })
+        }
+        catch (err) {
+            console.error(err.message);
+        }
     }
 
     const ReserveBtn = () => {

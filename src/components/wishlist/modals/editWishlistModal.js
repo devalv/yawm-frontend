@@ -1,5 +1,6 @@
 import {Button, FormControl, InputGroup, Modal} from "react-bootstrap";
 import React, {useState} from "react";
+import axios from "axios";
 
 const {REACT_APP_API_V1_URL} = process.env;
 
@@ -14,28 +15,18 @@ function EditWishlistModal(props) {
         setWishlistName({"name": e.target.value});
     }
 
-    const updateWishlist = (e) => {
+    const updateWishlist = async (e) => {
         e.preventDefault(); // prevent the default action
-
-        const request = {
-            method: "PUT",
-            body: JSON.stringify(wishlistName),
-            credentials: "include",
-        };
-
-        fetch(wishlistsEditEndpoint, request)
-            .then((response) => {
-                if (!response.ok) throw new Error(response.data);
-                else return response.json();
-            })
-            .then((data) => {
+        try {
+            await axios.put(wishlistsEditEndpoint, wishlistName)
+            .then(function (response) {
                 props.onHide();
                 window.location.reload();
             })
-            .catch((err) => {
-                console.log('err:', err)
-            });
-
+        }
+        catch (err) {
+            console.error(err.message);
+        }
     };
 
   return (

@@ -1,5 +1,6 @@
 import {Button, FormCheck, FormGroup, Modal} from "react-bootstrap";
 import React, {useState} from "react";
+import axios from "axios";
 
 const {REACT_APP_API_V2_URL} = process.env;
 
@@ -10,29 +11,19 @@ function EditWishlistProductModal(props) {
     const [substitutable, setProductSubstitutable] = useState(props.substitutable)
     const [reserved, setProductReserved] = useState(props.reserved)
 
-    const updateProduct = (e) => {
+    const updateProduct = async (e) => {
         const productInfo = {"reserved": reserved, "substitutable": substitutable}
         e.preventDefault(); // prevent the default action
-
-        const request = {
-            method: "PUT",
-            body: JSON.stringify(productInfo),
-            credentials: "include",
-        };
-
-        fetch(productEditEndpoint, request)
-            .then((response) => {
-                if (!response.ok) throw new Error(response.data);
-                else return response.json();
-            })
-            .then((data) => {
+        try {
+            await axios.put(productEditEndpoint, productInfo)
+            .then(function (response) {
                 props.onHide();
                 window.location.reload();
             })
-            .catch((err) => {
-                console.log('err:', err)
-            });
-
+        }
+        catch (err) {
+            console.error(err.message);
+        }
     };
 
   return (

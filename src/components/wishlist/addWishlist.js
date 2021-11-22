@@ -1,15 +1,14 @@
 import {Button, Form, Modal, Spinner} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
+import axios from "axios";
 
 const {REACT_APP_API_V2_URL} = process.env;
 
 function AddWishlist(props) {
 
-    // TODO: @devalv move to env
     const wishlistsEndpointV2 = REACT_APP_API_V2_URL + "/wishlists";
-
     const [productInputs, setProductInputs] = useState([])
-    // TODO: @devalv оставить только formYValues?
+    // TODO: @devalv избавиться от тупого дублирования
     const [formYValues, setFormYValues] = useState([])
     const [loading, setLoading] = useState(false)
 
@@ -50,30 +49,19 @@ function AddWishlist(props) {
     }
   };
 
-    const createWishlist = (e) => {
-        e.preventDefault(); // prevent the default action
-
+    const createWishlist = async (e) => {
+        e.preventDefault();
         const validatedUrls = validateForm()
-
-        const request = {
-            method: "POST",
-            body: JSON.stringify({product_urls: validatedUrls}),
-            credentials: "include",
-        };
-
-        fetch(wishlistsEndpointV2, request)
-            .then((response) => {
-                if (!response.ok) throw new Error(response.data);
-                else return response.json();
-            })
-            .then((data) => {
-                console.log("Sent!");
+        try {
+            await axios.post(wishlistsEndpointV2, {product_urls: validatedUrls})
+            .then(function (response) {
                 props.handleClose();
                 window.location.reload();
             })
-            .catch((err) => {
-                console.log('err:', err)
-            });
+        }
+        catch (err) {
+            console.error(err.message);
+        }
     };
 
     const productLine = (index) => {

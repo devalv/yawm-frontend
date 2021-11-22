@@ -7,6 +7,7 @@ import {
 import {AuthContext} from "../auth/auth-context";
 import AddWishlist from "./addWishlist";
 import {useParams} from "react-router-dom";
+import axios from "axios";
 
 
 function Wishlist() {
@@ -26,11 +27,11 @@ function Wishlist() {
 
 
     const extractPaginationPages = (paginationLinks) => {
-        // (?<=\?size\=9\&page\=).*
+        setPaginationInfo({"next": null, "prev": null, "show_prev": null, "show_next": null});
         const show_prev = paginationLinks.first !== paginationLinks.self;
         const show_next = paginationLinks.last !== paginationLinks.self;
-        const prev_link = (paginationLinks.prev)?paginationLinks.prev.match(/(?<=\?size=9&page=).*/)[0]:null;
-        const next_link = (paginationLinks.next)?paginationLinks.next.match(/(?<=\?size=9&page=).*/)[0]:null;
+        const prev_link = (paginationLinks.prev)?paginationLinks.prev.match(/(?:page=)(\d)/)[1]:null;
+        const next_link = (paginationLinks.next)?paginationLinks.next.match(/(?:page=)(\d)/)[1]:null;
         setPaginationInfo({"next": next_link, "prev": prev_link, "show_prev": show_prev, "show_next": show_next});
     }
 
@@ -81,31 +82,23 @@ function Wishlist() {
     }
 
     useEffect(() => {
-        setPaginationInfo({"next": null, "prev": null, "show_prev": null, "show_next": null});
+        const getWishlists = async () => {
+            try {
+                await axios.get(producerWishlistEndpoint)
+                    .then(function (response) {
+                    setWishlist(response.data.items);
+                    extractPaginationPages(response.data.links);
 
-        const getWishlists = () => {
-            const request = {
-                method: "GET",
-                credentials: "include",
-            };
-
-            fetch(producerWishlistEndpoint, request)
-                .then((response) => {
-                    if (!response.ok) throw new Error(response.data);
-                    else return response.json();
-                })
-                .then((data) => {
-                    setWishlist(data.items);
-                    extractPaginationPages(data.links);
-                })
-                .catch((err) => {
-                });
+                    })
+            }
+            catch (err) {
+                console.error(err.message);
+            }
         };
 
         getWishlists();
 
-
-    }, [producerWishlistEndpoint])
+    }, [])
 
     return (
     <>
