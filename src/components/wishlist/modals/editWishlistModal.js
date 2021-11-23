@@ -1,33 +1,33 @@
-import {Button, FormControl, InputGroup, Modal} from "react-bootstrap";
-import React, {useState} from "react";
+import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
+import React, { useState } from "react";
 import axios from "axios";
 
-const {REACT_APP_API_V1_URL} = process.env;
+const { REACT_APP_API_V1_URL } = process.env;
 
 function EditWishlistModal(props) {
-    const id = props.id;
-    const name = props.name;
+  const id = props.id;
+  const name = props.name;
 
-    const wishlistsEditEndpoint = `${REACT_APP_API_V1_URL}/wishlist/${id}`;
-    const [wishlistName, setWishlistName] = useState({"name": name});
+  const wishlistsEditEndpoint = `${REACT_APP_API_V1_URL}/wishlist/${id}`;
+  const [wishlistName, setWishlistName] = useState({ name: name });
 
-    const handleWishlistNameChange = (e) => {
-        setWishlistName({"name": e.target.value});
+  const handleWishlistNameChange = (e) => {
+    setWishlistName({ name: e.target.value });
+  };
+
+  const updateWishlist = async (e) => {
+    e.preventDefault(); // prevent the default action
+    try {
+      await axios
+        .put(wishlistsEditEndpoint, wishlistName)
+        .then(function (response) {
+          props.onHide();
+          window.location.reload();
+        });
+    } catch (err) {
+      console.error(err.message);
     }
-
-    const updateWishlist = async (e) => {
-        e.preventDefault(); // prevent the default action
-        try {
-            await axios.put(wishlistsEditEndpoint, wishlistName)
-            .then(function (response) {
-                props.onHide();
-                window.location.reload();
-            })
-        }
-        catch (err) {
-            console.error(err.message);
-        }
-    };
+  };
 
   return (
     <Modal
@@ -43,8 +43,15 @@ function EditWishlistModal(props) {
       </Modal.Header>
       <Modal.Body>
         <InputGroup size="sm" className="mb-3">
-            <InputGroup.Text id="inputGroup-sizing-sm">Введите название</InputGroup.Text>
-            <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder={wishlistName.name} onChange={e => handleWishlistNameChange(e)}/>
+          <InputGroup.Text id="inputGroup-sizing-sm">
+            Введите название
+          </InputGroup.Text>
+          <FormControl
+            aria-label="Small"
+            aria-describedby="inputGroup-sizing-sm"
+            placeholder={wishlistName.name}
+            onChange={(e) => handleWishlistNameChange(e)}
+          />
         </InputGroup>
       </Modal.Body>
       <Modal.Footer>

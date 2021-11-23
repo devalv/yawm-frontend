@@ -1,41 +1,39 @@
-import {Button, FormControl, InputGroup, Modal} from "react-bootstrap";
-import React, {useState} from "react";
+import { Button, FormControl, InputGroup, Modal } from "react-bootstrap";
+import React, { useState } from "react";
 import axios from "axios";
 
-const {REACT_APP_API_V2_URL} = process.env;
+const { REACT_APP_API_V2_URL } = process.env;
 
 function AddWishlistProductModal(props) {
-    const id = props.id;
+  const id = props.id;
 
-    const wishlistsAddProductEndpoint = `${REACT_APP_API_V2_URL}/wishlists/${id}/products-add`;
-    const [productUrls, setProductUrls] = useState([]);
+  const wishlistsAddProductEndpoint = `${REACT_APP_API_V2_URL}/wishlists/${id}/products-add`;
+  const [productUrls, setProductUrls] = useState([]);
 
-    const handleProductUrlsChange = (i, e) => {
-        if (e.target.value){
-            const url = e.target.value.replaceAll("#", "");
-            setProductUrls([{"url": url}]);
-        }
-        else {
-            console.error('There is no url!')
-        }
-
+  const handleProductUrlsChange = (i, e) => {
+    if (e.target.value) {
+      const url = e.target.value.replaceAll("#", "");
+      setProductUrls([{ url: url }]);
+    } else {
+      console.error("There is no url!");
     }
+  };
 
-    const addWishlistProducts = async (e) => {
-        e.preventDefault(); // prevent the default action
-        try {
-            await axios.put(wishlistsAddProductEndpoint, {"product_urls": productUrls})
-            .then(function (response) {
-                props.onHide();
-                window.location.reload();
-            })
-        }
-        catch (err) {
-            console.error(err.message);
-        }
-    };
+  const addWishlistProducts = async (e) => {
+    e.preventDefault(); // prevent the default action
+    try {
+      await axios
+        .put(wishlistsAddProductEndpoint, { product_urls: productUrls })
+        .then(function (response) {
+          props.onHide();
+          window.location.reload();
+        });
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
 
-    return (
+  return (
     <Modal
       {...props}
       size="lg"
@@ -49,8 +47,15 @@ function AddWishlistProductModal(props) {
       </Modal.Header>
       <Modal.Body>
         <InputGroup size="sm" className="mb-3">
-            <InputGroup.Text id="inputGroup-sizing-sm">Вставьте ссылку на товар</InputGroup.Text>
-            <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="https://ya.ru" onChange={e => handleProductUrlsChange(0, e)}/>
+          <InputGroup.Text id="inputGroup-sizing-sm">
+            Вставьте ссылку на товар
+          </InputGroup.Text>
+          <FormControl
+            aria-label="Small"
+            aria-describedby="inputGroup-sizing-sm"
+            placeholder="https://ya.ru"
+            onChange={(e) => handleProductUrlsChange(0, e)}
+          />
         </InputGroup>
       </Modal.Body>
       <Modal.Footer>
