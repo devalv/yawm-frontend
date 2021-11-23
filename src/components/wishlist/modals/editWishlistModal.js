@@ -8,8 +8,8 @@ function EditWishlistModal(props) {
     const id = props.id;
     const name = props.name;
 
-    const wishlistsEditEndpoint = REACT_APP_API_V1_URL + "/wishlist/" + id;
-    const [wishlistName, setWishlistName] = useState({"name": name})
+    const wishlistsEditEndpoint = `${REACT_APP_API_V1_URL}/wishlist/${id}`;
+    const [wishlistName, setWishlistName] = useState({"name": name});
 
     const handleWishlistNameChange = (e) => {
         setWishlistName({"name": e.target.value});

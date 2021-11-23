@@ -10,11 +10,8 @@ function DetailProductCard(props) {
     const url = props.product.url;
     const name = props.product.name;
     const id = props.product.id;
-    // TODO: @devalv proper dates is here!
     const createdAt = (props.product.created_at) ? new Date(props.product.created_at): null;
     const createdAtStr = createdAt.toLocaleString("ru")
-
-    console.log(createdAt)
 
     const substitutable = props.product.substitutable;
     const reserved = props.product.reserved;
@@ -23,7 +20,7 @@ function DetailProductCard(props) {
     const [modalEditProductShow, setModalEditProductShow] = React.useState(false);
 
     const reserveProduct = async () => {
-        const productReserveEndpoint = REACT_APP_API_V2_URL + '/wishlist-products/' + id  + '/reserve';
+        const productReserveEndpoint = `${REACT_APP_API_V2_URL}/wishlist-products/${id}/reserve`;
         try {
             await axios.put(productReserveEndpoint)
             .then(function (response) {
@@ -36,7 +33,7 @@ function DetailProductCard(props) {
     }
 
     const deleteProduct = async () => {
-        const productDeleteEndpoint = REACT_APP_API_V2_URL + '/wishlist-products/' + id;
+        const productDeleteEndpoint = `${REACT_APP_API_V2_URL}/wishlist-products/${id}`;;
         try {
             await axios.delete(productDeleteEndpoint)
             .then(function (response) {

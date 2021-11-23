@@ -15,8 +15,8 @@ function DetailWishlistCard(props) {
     const history = useHistory();
     const userId = props.userId;
 
-    const wishlistDetailEndpoint = REACT_APP_API_V2_URL + "/wishlists/" + id;
-    const wishlistDeleteEndpoint = REACT_APP_API_V1_URL + "/wishlist/" + id;
+    const wishlistDetailEndpoint = `${REACT_APP_API_V2_URL}/wishlists/${id}`;
+    const wishlistDeleteEndpoint = `${REACT_APP_API_V1_URL}/wishlist/${id}`;
 
     const [wishlistDetail, setWishlistDetail] = useState({"name": "", "created_at": "", "user_id": "", "products": []});
     const [products, setProducts] = useState([]);

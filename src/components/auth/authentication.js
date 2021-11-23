@@ -5,7 +5,6 @@ import {useContext, useEffect} from "react";
 import {anonymousUser, AuthContext} from "./auth-context";
 
 const {REACT_APP_API_ORIGIN, REACT_APP_API_V1_URL} = process.env;
-const userInfoEndpoint = REACT_APP_API_V1_URL + '/user/info'
 
 axios.interceptors.request.use(
     config => {
@@ -24,13 +23,6 @@ axios.interceptors.request.use(
         return Promise.reject(error);
     }
 );
-
-const setAccessTokenCookie = (urlToken) => {
-    window.history.pushState("object", document.title, "/");
-    Cookies.set('access_token', urlToken, { expires: 1 });
-    // TODO: @devalv add csrf?
-    // TODO: @devalv add xss?
-}
 
 export const login = async () => {
     const loginEndpoint = `${REACT_APP_API_V1_URL}/react_login`;
@@ -52,35 +44,41 @@ export const backendLogout = async () => {
 function NewAuthentication() {
     const [, setAuthState] = useContext(AuthContext);
 
-    const getUserInfo = async () => {
-        try {
-            const { data } = await axios.get(userInfoEndpoint);
-            setAuthState({username: data["username"], authenticated: true, user_id: data["id"]});
-        } catch (err) {
-            console.error(err.message);
-            setAccessTokenCookie(null);
-        }
-    };
-
-    const authenticate = async () => {
-        const authToken = (window.location.search.match(/authToken=([^&]+)/) || [])[1];
-        if (authToken) {
-            setAccessTokenCookie(authToken);
-        }
-
-        const accessToken = Cookies.get('access_token') || null;
-        if (accessToken) {
-            await getUserInfo(accessToken);
-        }
-        else {
-            setAuthState(anonymousUser);
-        }
-    };
-
     useEffect(() => {
-        // TODO: @devalv Promise returned from authenticate is ignored 
+        // TODO: @devalv Promise returned from authenticate is ignored
+        const setAccessTokenCookie = (authToken) => {
+            window.history.pushState("object", document.title, "/");
+            Cookies.set('access_token', authToken, { expires: 1, secure: true});
+        };
+
+        const getUserInfo = async () => {
+            const userInfoEndpoint = `${REACT_APP_API_V1_URL}/user/info`
+            try {
+                const { data } = await axios.get(userInfoEndpoint);
+                setAuthState({username: data["username"], authenticated: true, user_id: data["id"]});
+            } catch (err) {
+                console.error(err.message);
+                setAccessTokenCookie(null);
+            }
+        };
+
+        const authenticate = async () => {
+            const authToken = (window.location.search.match(/authToken=([^&]+)/) || [])[1];
+            if (authToken) {
+                setAccessTokenCookie(authToken);
+            }
+
+            const accessToken = Cookies.get('access_token') || null;
+            if (accessToken) {
+                await getUserInfo(accessToken);
+            }
+            else {
+                setAuthState(anonymousUser);
+            }
+        };
+
         authenticate();
-    }, []);
+    }, [setAuthState]);
 
     return null;
 }

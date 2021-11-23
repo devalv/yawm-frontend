@@ -11,11 +11,11 @@ function HealthCheck() {
             url: REACT_APP_HEALTH_URL,
         },
         onSuccess: ({ service, timestamp }) => {
-            console.log(`Service "${service.name}" is available since "${timestamp}" 🎉`);
+            console.info(`Service "${service.name}" is available since "${timestamp}" 🎉`);
             window.location.reload();
         },
         onError: ({ service, timestamp }) => {
-            console.log(`Service "${service.name}" is not available since "${timestamp}" 😔`);
+            console.error(`Service "${service.name}" is not available since "${timestamp}" 😔`);
         },
         refreshInterval: 9000
     });

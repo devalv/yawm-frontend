@@ -7,8 +7,8 @@ const {REACT_APP_API_V2_URL} = process.env;
 function AddWishlistProductModal(props) {
     const id = props.id;
 
-    const wishlistsAddProductEndpoint = REACT_APP_API_V2_URL + "/wishlists/" + id + "/products-add";
-    const [productUrls, setProductUrls] = useState([])
+    const wishlistsAddProductEndpoint = `${REACT_APP_API_V2_URL}/wishlists/${id}/products-add`;
+    const [productUrls, setProductUrls] = useState([]);
 
     const handleProductUrlsChange = (i, e) => {
         if (e.target.value){
@@ -16,7 +16,7 @@ function AddWishlistProductModal(props) {
             setProductUrls([{"url": url}]);
         }
         else {
-            console.log('there is no url!')
+            console.error('There is no url!')
         }
 
     }

@@ -1,12 +1,12 @@
 import {Button, Form, Modal, Spinner} from "react-bootstrap";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 
 const {REACT_APP_API_V2_URL} = process.env;
 
 function AddWishlist(props) {
 
-    const wishlistsEndpointV2 = REACT_APP_API_V2_URL + "/wishlists";
+    const wishlistsEndpointV2 = `${REACT_APP_API_V2_URL}/wishlists`;
     const [productInputs, setProductInputs] = useState([])
     // TODO: @devalv избавиться от тупого дублирования
     const [formYValues, setFormYValues] = useState([])
@@ -87,12 +87,8 @@ function AddWishlist(props) {
         </Form.Row>
         ))
 
-    useEffect(() => {
-        addProductLine();
-    }, [])
-
     return (
-        <Modal show={props.show} onHide={props.handleClose}>
+        <Modal show={props.show} onHide={props.handleClose} onShow={addProductLine}>
             <Modal.Header>
                 <Modal.Title>Вставьте ссылки на карточки товара:</Modal.Title>
                 <Button variant="secondary" onClick={modalClose}>

@@ -7,7 +7,7 @@ const {REACT_APP_API_V2_URL} = process.env;
 function EditWishlistProductModal(props) {
     const id = props.id;
 
-    const productEditEndpoint = REACT_APP_API_V2_URL + "/wishlist-products/" + id;
+    const productEditEndpoint = `${REACT_APP_API_V2_URL}/wishlist-products/${id}`;
     const [substitutable, setProductSubstitutable] = useState(props.substitutable)
     const [reserved, setProductReserved] = useState(props.reserved)
 

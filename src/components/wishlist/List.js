@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext} from "react";
 import {
+    Button,
     Card,
     CardGroup, Col,
     Container, Pagination, Row,
@@ -9,13 +10,13 @@ import AddWishlist from "./addWishlist";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 
+const {REACT_APP_API_V1_URL} = process.env;
 
+// TODO: @devalv fix form and modal hell
 function Wishlist() {
     const { page } = useParams();
 
     const [authContext] = useContext(AuthContext);
-    const {REACT_APP_API_V1_URL} = process.env;
-    const producerWishlistEndpoint = (page)? REACT_APP_API_V1_URL + "/wishlist" + "?size=9&page=" + page: REACT_APP_API_V1_URL + "/wishlist?size=9";
 
     const [wishlists, setWishlist] = useState([]);
     const [paginationInfo, setPaginationInfo] = useState({"next": null, "prev": null})
@@ -62,11 +63,11 @@ function Wishlist() {
         {
             if (paginationInfo.prev && paginationInfo.show_prev)
                 {
-                    prev_btn = <Pagination.Prev href={paginationInfo.prev}/>
+                    prev_btn = <Button variant="info" href={paginationInfo.prev}>Назад</Button>
                 }
             if (paginationInfo.next && paginationInfo.show_next)
                 {
-                    next_btn = <Pagination.Next href={paginationInfo.next}/>
+                    next_btn = <Button variant="success" href={paginationInfo.next}>Вперёд</Button>
                 }
 
             return (
@@ -83,6 +84,7 @@ function Wishlist() {
 
     useEffect(() => {
         const getWishlists = async () => {
+            const producerWishlistEndpoint = (page)? `${REACT_APP_API_V1_URL}/wishlist?size=11&page=${page}`: `${REACT_APP_API_V1_URL}/wishlist?size=11`;
             try {
                 await axios.get(producerWishlistEndpoint)
                     .then(function (response) {
@@ -98,12 +100,12 @@ function Wishlist() {
 
         getWishlists();
 
-    }, [])
+    }, [page])
 
     return (
     <>
         <AddWishlist show={show} handleClose={handleClose}/>
-        <Container>
+        <Container fluid="md">
             <CardGroup>
                     <Col md="auto" className="border rounded">
                         {new_wishlist_card_button()}
@@ -124,14 +126,12 @@ function Wishlist() {
             </CardGroup>
         </Container>
         <hr />
-        <Container>
-
+        <Container fluid="md">
             <div className="d-flex justify-content-center">
-                <Row className="my-auto text-center">
+                <Row className="text-center">
                     {pagination_navigation()}
                 </Row>
             </div>
-
         </Container>
     </>
     );
