@@ -31,7 +31,11 @@ function DetailWishlistCard(props) {
 
   const [modalEditWishlistShow, setModalEditWishlistShow] =
     React.useState(false);
+  const handleModalEditWishlistShow = () => setModalEditWishlistShow(true);
+  const handleModalEditWishlistClose = () => setModalEditWishlistShow(false);
   const [modalAddProductShow, setModalAddProductShow] = React.useState(false);
+  const handleModalAddProductShow = () => setModalAddProductShow(true);
+  const handleModalAddProductClose = () => setModalAddProductShow(false);
 
   function ProductCards() {
     const productsData = products;
@@ -81,16 +85,10 @@ function DetailWishlistCard(props) {
           <h1>
             Ваш вишлист `{wishlistDetail.name}` от {createdAtStr}.
           </h1>
-          <Button
-            variant="primary"
-            onClick={() => setModalAddProductShow(true)}
-          >
+          <Button variant="primary" onClick={handleModalAddProductShow}>
             Добавить позицию
           </Button>
-          <Button
-            variant="success"
-            onClick={() => setModalEditWishlistShow(true)}
-          >
+          <Button variant="success" onClick={handleModalEditWishlistShow}>
             Сменить название
           </Button>
           <Button variant="danger" onClick={deleteWishlist}>
@@ -99,14 +97,14 @@ function DetailWishlistCard(props) {
 
           <EditWishlistModal
             show={modalEditWishlistShow}
-            onHide={() => setModalEditWishlistShow(false)}
+            onHide={handleModalEditWishlistClose}
             name={wishlistDetail.name}
             id={id}
           />
 
           <AddWishlistProductModal
             show={modalAddProductShow}
-            onHide={() => setModalAddProductShow(false)}
+            onHide={handleModalAddProductClose}
             id={id}
           />
         </>

@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import NewAuthentication from "./auth/authentication";
 import { anonymousUser, AuthContext } from "./auth/auth-context";
 import HealthCheck from "./health-check";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import NavbarC from "./navbar";
-import Wishlist from "./wishlist/List";
+import Wishlist from "./wishlist/listWishlists";
 import DetailWishlistCard from "./wishlist/detailWishlistCard";
 
 function App() {
   const [AuthState, setAuthState] = useState(anonymousUser);
-
-  // Set app title
-  useEffect(() => {
-    document.title = "YAWM";
-  }, []);
 
   return (
     <Router>

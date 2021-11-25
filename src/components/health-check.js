@@ -21,7 +21,7 @@ function HealthCheck() {
         `Service "${service.name}" is not available since "${timestamp}" 😔`
       );
     },
-    refreshInterval: 9000,
+    refreshInterval: 25000,
   });
   if (available) {
     return null;

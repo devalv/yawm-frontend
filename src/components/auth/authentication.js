@@ -45,7 +45,6 @@ function NewAuthentication() {
   const [, setAuthState] = useContext(AuthContext);
 
   useEffect(() => {
-    // TODO: @devalv Promise returned from authenticate is ignored
     const setAccessTokenCookie = (authToken) => {
       window.history.pushState("object", document.title, "/");
       Cookies.set("access_token", authToken, { expires: 1, secure: true });

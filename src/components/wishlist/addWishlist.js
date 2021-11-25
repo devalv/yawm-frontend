@@ -7,36 +7,24 @@ const { REACT_APP_API_V2_URL } = process.env;
 function AddWishlist(props) {
   const wishlistsEndpointV2 = `${REACT_APP_API_V2_URL}/wishlists`;
   const [productInputs, setProductInputs] = useState([]);
-  // TODO: @devalv избавиться от тупого дублирования
-  const [formYValues, setFormYValues] = useState([]);
+  const [formValues, setFormValues] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const handleYChange = (i, e) => {
-    setFormYValues([...formYValues, { url: e.target.value }]);
+  const handleFormInputChange = (i, e) => {
+    const url = e.target.value.replaceAll("#", "");
+    setFormValues([...formValues, { url: url }]);
   };
 
   const addProductLine = () => {
-    setProductInputs([...productInputs, productLine(formYValues.length)]);
-    setFormYValues([...formYValues, {}]);
+    setProductInputs([...productInputs, productLine(formValues.length)]);
+    setFormValues([...formValues, {}]);
   };
 
   const modalClose = () => {
     setProductInputs([]);
-    setFormYValues([]);
+    setFormValues([]);
     props.handleClose();
     setLoading(false);
-  };
-
-  const validateForm = () => {
-    const validUrls = [];
-    formYValues.forEach((row) => {
-      let url = row.url;
-      if (url) {
-        url = url.replaceAll("#", "");
-        validUrls.push({ url: url });
-      }
-    });
-    return validUrls;
   };
 
   const toggleLoader = () => {
@@ -49,10 +37,9 @@ function AddWishlist(props) {
 
   const createWishlist = async (e) => {
     e.preventDefault();
-    const validatedUrls = validateForm();
     try {
       await axios
-        .post(wishlistsEndpointV2, { product_urls: validatedUrls })
+        .post(wishlistsEndpointV2, { product_urls: formValues })
         .then(function (response) {
           props.handleClose();
           window.location.reload();
@@ -69,7 +56,7 @@ function AddWishlist(props) {
           <Form.Control
             type="text"
             placeholder="https://ya.ru"
-            onChange={(e) => handleYChange(index, e)}
+            onChange={(e) => handleFormInputChange(index, e)}
           />
           <Form.Text className="text-muted">
             В строке должен быть только 1 товар

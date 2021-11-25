@@ -20,6 +20,8 @@ function DetailProductCard(props) {
   const card_bg = reserved ? "secondary" : "";
 
   const [modalEditProductShow, setModalEditProductShow] = React.useState(false);
+  const handleModalEditProductShow = () => setModalEditProductShow(true);
+  const handleModalEditProductClose = () => setModalEditProductShow(false);
 
   const reserveProduct = async () => {
     const productReserveEndpoint = `${REACT_APP_API_V2_URL}/wishlist-products/${id}/reserve`;
@@ -55,10 +57,7 @@ function DetailProductCard(props) {
     } else if (owner) {
       return (
         <>
-          <Button
-            variant="warning"
-            onClick={() => setModalEditProductShow(true)}
-          >
+          <Button variant="warning" onClick={handleModalEditProductShow}>
             Редактировать
           </Button>
           <Button variant="danger" onClick={deleteProduct}>
@@ -69,7 +68,7 @@ function DetailProductCard(props) {
             substitutable={substitutable}
             reserved={reserved}
             show={modalEditProductShow}
-            onHide={() => setModalEditProductShow(false)}
+            onHide={handleModalEditProductClose}
           />
         </>
       );

@@ -1,21 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Button,
-  Card,
-  CardGroup,
-  Col,
-  Container,
-  Pagination,
-  Row,
-} from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import { Card, CardGroup, Col, Container, Row } from "react-bootstrap";
 import { AuthContext } from "../auth/auth-context";
 import AddWishlist from "./addWishlist";
-import { useParams } from "react-router-dom";
+import PaginationButtons from "./paginationNavigation";
 import axios from "axios";
 
 const { REACT_APP_API_V1_URL } = process.env;
 
-// TODO: @devalv fix form and modal hell
 function Wishlist() {
   const { page } = useParams();
 
@@ -28,9 +20,10 @@ function Wishlist() {
   });
 
   // modal
-  const [show, setShow] = useState(false);
-  const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
+  const [modalCreateWishlistShow, setModalCreateWishlistShow] = useState(false);
+  const handleModalCreateWishlistShow = () => setModalCreateWishlistShow(true);
+  const handleModalCreateWishlistClose = () =>
+    setModalCreateWishlistShow(false);
 
   const extractPaginationPages = (paginationLinks) => {
     setPaginationInfo({
@@ -55,11 +48,11 @@ function Wishlist() {
     });
   };
 
-  const new_wishlist_card_button = () => {
+  function NewWishlistCardBtn() {
     if (authContext.authenticated) {
       return (
         <>
-          <div onClick={handleShow}>
+          <div onClick={handleModalCreateWishlistShow}>
             <Card
               border="primary"
               style={{ width: "18rem" }}
@@ -76,39 +69,10 @@ function Wishlist() {
           </div>
         </>
       );
+    } else {
+      return <></>;
     }
-  };
-
-  const pagination_navigation = () => {
-    // TODO: @devalv rename
-    let prev_btn = "";
-    let next_btn = "";
-    if (paginationInfo.prev || paginationInfo.next) {
-      if (paginationInfo.prev && paginationInfo.show_prev) {
-        prev_btn = (
-          <Button variant="info" href={paginationInfo.prev}>
-            Назад
-          </Button>
-        );
-      }
-      if (paginationInfo.next && paginationInfo.show_next) {
-        next_btn = (
-          <Button variant="success" href={paginationInfo.next}>
-            Вперёд
-          </Button>
-        );
-      }
-
-      return (
-        <>
-          <Pagination>
-            {prev_btn}
-            {next_btn}
-          </Pagination>
-        </>
-      );
-    }
-  };
+  }
 
   useEffect(() => {
     const getWishlists = async () => {
@@ -130,11 +94,14 @@ function Wishlist() {
 
   return (
     <>
-      <AddWishlist show={show} handleClose={handleClose} />
+      <AddWishlist
+        show={modalCreateWishlistShow}
+        handleClose={handleModalCreateWishlistClose}
+      />
       <Container fluid="md">
         <CardGroup>
           <Col md="auto" className="border rounded">
-            {new_wishlist_card_button()}
+            <NewWishlistCardBtn />
           </Col>
           {wishlists.map((wishlist, index) => (
             <Col md="auto" className="border rounded" key={wishlist.id}>
@@ -156,7 +123,9 @@ function Wishlist() {
       <hr />
       <Container fluid="md">
         <div className="d-flex justify-content-center">
-          <Row className="text-center">{pagination_navigation()}</Row>
+          <Row className="text-center">
+            <PaginationButtons paginationInfo={paginationInfo} />
+          </Row>
         </div>
       </Container>
     </>
