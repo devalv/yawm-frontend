@@ -47,7 +47,7 @@ function NewAuthentication() {
   useEffect(() => {
     const setAccessTokenCookie = (authToken) => {
       window.history.pushState("object", document.title, "/");
-      Cookies.set("access_token", authToken, { expires: 1, secure: true });
+      Cookies.set("access_token", authToken, { expires: 1, secure: true , sameSite: 'strict' });
     };
 
     const getUserInfo = async () => {
