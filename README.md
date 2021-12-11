@@ -1,6 +1,7 @@
-# Getting Started with Create React App
-
+# Yet another wishlist maker - YAWM - react-app
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+[Main repo](https://github.com/devalv/yawm).
 
 ## Available Scripts
 
