@@ -4,7 +4,7 @@ import { useContext, useEffect } from "react";
 
 import { anonymousUser, AuthContext } from "./auth-context";
 
-const { REACT_APP_API_ORIGIN, REACT_APP_API_V1_URL } = process.env;
+const { REACT_APP_API_ORIGIN, REACT_APP_API_V2_URL } = process.env;
 
 axios.interceptors.request.use(
   (config) => {
@@ -24,14 +24,8 @@ axios.interceptors.request.use(
   }
 );
 
-export const login = async () => {
-  const loginEndpoint = `${REACT_APP_API_V1_URL}/react_login`;
-  const client_state = Math.random().toString(36).substring(2, 30);
-  window.location.href = `${loginEndpoint}?state=${client_state}`;
-};
-
 export const backendLogout = async () => {
-  const logoutEndpoint = `${REACT_APP_API_V1_URL}/logout`;
+  const logoutEndpoint = `${REACT_APP_API_V2_URL}/logout`;
   try {
     await axios.get(logoutEndpoint);
   } catch (err) {
@@ -51,7 +45,7 @@ function NewAuthentication() {
     };
 
     const getUserInfo = async () => {
-      const userInfoEndpoint = `${REACT_APP_API_V1_URL}/user/info`;
+      const userInfoEndpoint = `${REACT_APP_API_V2_URL}/users/info`;
       try {
         const { data } = await axios.get(userInfoEndpoint);
         setAuthState({

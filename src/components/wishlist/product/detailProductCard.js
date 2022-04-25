@@ -26,7 +26,7 @@ function DetailProductCard(props) {
   const reserveProduct = async () => {
     const productReserveEndpoint = `${REACT_APP_API_V2_URL}/wishlist-products/${id}/reserve`;
     try {
-      await axios.put(productReserveEndpoint).then(function (response) {
+      await axios.patch(productReserveEndpoint).then(function (response) {
         window.location.reload();
       });
     } catch (err) {
