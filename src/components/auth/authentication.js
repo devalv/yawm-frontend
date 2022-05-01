@@ -39,10 +39,7 @@ function NewAuthentication() {
   const [, setAuthState] = useContext(AuthContext);
 
   useEffect(() => {
-    const setAccessTokenCookie = (authToken) => {
-      window.history.pushState("object", document.title, "/");
-      Cookies.set("access_token", authToken, { expires: 1, secure: true , sameSite: 'strict' });
-    };
+
 
     const getUserInfo = async () => {
       const userInfoEndpoint = `${REACT_APP_API_V2_URL}/users/info`;
@@ -55,16 +52,11 @@ function NewAuthentication() {
         });
       } catch (err) {
         console.error(err.message);
-        setAccessTokenCookie(null);
+        await backendLogout();
       }
     };
 
     const authenticate = async () => {
-      const authToken = (window.location.search.match(/authToken=([^&]+)/) ||
-        [])[1];
-      if (authToken) {
-        setAccessTokenCookie(authToken);
-      }
 
       const accessToken = Cookies.get("access_token") || null;
       if (accessToken) {
