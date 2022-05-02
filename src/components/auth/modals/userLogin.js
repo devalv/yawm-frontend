@@ -109,7 +109,6 @@ function UserLoginModal(props) {
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={loginUser}>Войти</Button>
-                {/*TODO: hide button if authenticated*/}
                 <Button onClick={registerUser}>Зарегистрироваться</Button>
             </Modal.Footer>
         </Modal>
