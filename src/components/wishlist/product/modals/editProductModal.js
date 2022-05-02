@@ -1,4 +1,4 @@
-import { Button, FormCheck, FormGroup, Modal } from "react-bootstrap";
+import {Button, FormCheck, FormControl, FormGroup, Modal} from "react-bootstrap";
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -12,9 +12,16 @@ function EditWishlistProductModal(props) {
     props.substitutable
   );
   const [reserved, setProductReserved] = useState(props.reserved);
+  const [productName, setProductName] = useState(props.productName);
+
+  const handleProductNameChange = (e) => {
+    setProductName(e.target.value);
+  };
+
 
   const updateProduct = async (e) => {
-    const productInfo = { reserved: reserved, substitutable: substitutable };
+    const productInfo = { reserved: reserved, substitutable: substitutable, name: productName };
+    console.debug('product info:', productInfo);
     e.preventDefault(); // prevent the default action
     try {
       await axios
@@ -55,6 +62,12 @@ function EditWishlistProductModal(props) {
             id="substitutable-switch"
             checked={substitutable}
             onChange={() => setProductSubstitutable(!substitutable)}
+          />
+          <FormControl
+            aria-label="Small"
+            aria-describedby="inputGroup-sizing-sm"
+            placeholder={props.productName}
+            onChange={(e) => handleProductNameChange(e)}
           />
         </FormGroup>
       </Modal.Body>

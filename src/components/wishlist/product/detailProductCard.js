@@ -67,6 +67,7 @@ function DetailProductCard(props) {
             id={id}
             substitutable={substitutable}
             reserved={reserved}
+            productName={name}
             show={modalEditProductShow}
             onHide={handleModalEditProductClose}
           />
