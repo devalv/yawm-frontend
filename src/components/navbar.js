@@ -9,9 +9,16 @@ import NavbarToggle from "react-bootstrap/NavbarToggle";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 import { Github, Person, PersonFill, PersonX } from "react-bootstrap-icons";
 import React from "react";
-import { backendLogout, login } from "./auth/authentication";
+import { backendLogout } from "./auth/authentication";
+import UserLoginModal from "./auth/modals/userLogin"
+
+
 
 function NavbarC(props) {
+    const [modalUserLoginShow, setModalUserLoginShow] = React.useState(false);
+    const handleModalUserLoginShow = () => setModalUserLoginShow(true);
+    const handleModalUserLoginClose = () => setModalUserLoginShow(false);
+
   const NavProfile = () => {
     if (props.authenticated) {
       return (
@@ -30,7 +37,7 @@ function NavbarC(props) {
     } else {
       return (
         <>
-          <NavDropdown.Item onClick={login}>
+          <NavDropdown.Item onClick={handleModalUserLoginShow}>
             <Person />
             &nbsp;Войти
           </NavDropdown.Item>
@@ -51,7 +58,7 @@ function NavbarC(props) {
               height="30"
               className="d-inline-block align-top"
             />
-            &nbsp;Yet another wishlist maker v.0.1
+            &nbsp;Yet another wishlist maker v.0.2
           </NavbarBrand>
           <NavbarToggle />
           <NavbarCollapse className="justify-content-end">
@@ -64,6 +71,11 @@ function NavbarC(props) {
           </NavbarCollapse>
         </Container>
       </Navbar>
+      <UserLoginModal
+            show={modalUserLoginShow}
+            onHide={handleModalUserLoginClose}
+            
+    />
       <br />
       <br />
     </>
