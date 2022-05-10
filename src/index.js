@@ -1,12 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./components/App";
 import * as Sentry from "@sentry/react";
 import { BrowserTracing } from "@sentry/tracing";
+import App from "./components/App";
 
 const DEBUG = process.env.REACT_APP_DEBUG;
-
-console.debug(`DEBUG is ${DEBUG}`)
 
 Sentry.init({
   debug: DEBUG || false,
