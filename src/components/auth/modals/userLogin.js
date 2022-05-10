@@ -1,4 +1,4 @@
-import { InputGroup, Modal, FormControl, Button } from "react-bootstrap";
+// import { InputGroup, Modal, FormControl, Button } from "react-bootstrap";
 import React, {useState, useContext} from "react";
 import axios from "axios";
 import {tokenInfo, TokenContext} from "../auth-context";
@@ -73,46 +73,47 @@ function UserLoginModal(props) {
         }
     };
 
-    return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton closeLabel="Закрыть">
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Вход
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Text id="inputGroup-sizing-sm">
-                        Имя пользователя
-                    </InputGroup.Text>
-                    <FormControl
-                        aria-label="Small"
-                        aria-describedby="inputGroup-sizing-sm"
-                        placeholder="username"
-                        onChange={(e) => handleUsernameChange(e)}
-                    />
-                    <InputGroup.Text id="inputGroup-sizing-sm">
-                        Пароль
-                    </InputGroup.Text>
-                    <FormControl
-                        aria-label="Small"
-                        aria-describedby="inputGroup-sizing-sm"
-                        placeholder="password"
-                        onChange={(e) => handlePasswordChange(e)}
-                    />
-                </InputGroup>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={loginUser}>Войти</Button>
-                <Button onClick={registerUser}>Зарегистрироваться</Button>
-            </Modal.Footer>
-        </Modal>
-    );
+    return
+    // (
+        // <Modal
+        //     {...props}
+        //     size="lg"
+        //     aria-labelledby="contained-modal-title-vcenter"
+        //     centered
+        // >
+        //     <Modal.Header closeButton closeLabel="Закрыть">
+        //         <Modal.Title id="contained-modal-title-vcenter">
+        //             Вход
+        //         </Modal.Title>
+        //     </Modal.Header>
+        //     <Modal.Body>
+        //         <InputGroup size="sm" className="mb-3">
+        //             <InputGroup.Text id="inputGroup-sizing-sm">
+        //                 Имя пользователя
+        //             </InputGroup.Text>
+        //             <FormControl
+        //                 aria-label="Small"
+        //                 aria-describedby="inputGroup-sizing-sm"
+        //                 placeholder="username"
+        //                 onChange={(e) => handleUsernameChange(e)}
+        //             />
+        //             <InputGroup.Text id="inputGroup-sizing-sm">
+        //                 Пароль
+        //             </InputGroup.Text>
+        //             <FormControl
+        //                 aria-label="Small"
+        //                 aria-describedby="inputGroup-sizing-sm"
+        //                 placeholder="password"
+        //                 onChange={(e) => handlePasswordChange(e)}
+        //             />
+        //         </InputGroup>
+        //     </Modal.Body>
+        //     <Modal.Footer>
+        //         <Button onClick={loginUser}>Войти</Button>
+        //         <Button onClick={registerUser}>Зарегистрироваться</Button>
+        //     </Modal.Footer>
+        // </Modal>
+    // );
 }
 
 export default UserLoginModal;

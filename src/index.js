@@ -1,24 +1,27 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import App from "./components/App";
-import "bootstrap/dist/css/bootstrap.min.css";
 import * as Sentry from "@sentry/react";
 import { BrowserTracing } from "@sentry/tracing";
 
-const { REACT_APP_SENTRY_DSN } = process.env;
+const DEBUG = process.env.REACT_APP_DEBUG;
+
+console.debug(`DEBUG is ${DEBUG}`)
 
 Sentry.init({
-    debug: true,
-    dsn: REACT_APP_SENTRY_DSN,
-    integrations: [new BrowserTracing()],
-    // We recommend adjusting this value in production, or using tracesSampler
-    // for finer control
-    tracesSampleRate: 1.0,
+  debug: DEBUG || false,
+  release: "yawm-frontend@0.3.0",
+  environment: (DEBUG) ? "dev": "production",
+  dsn: 'https://c7c50c25cc3448c3b7f9da3915c05110@o1201644.ingest.sentry.io/6373679',
+  integrations: [new BrowserTracing()],
+  // We recommend adjusting this value in production, or using tracesSampler
+  // for finer control
+  tracesSampleRate: 1.0,
 });
 
-ReactDOM.render(
-  <React.StrictMode>
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+<React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById("root")
 );

@@ -1,4 +1,4 @@
-import { Button, Card } from "react-bootstrap";
+// import { Button, Card } from "react-bootstrap";
 import React from "react";
 import EditWishlistProductModal from "./modals/editProductModal";
 import axios from "axios";
@@ -45,58 +45,59 @@ function DetailProductCard(props) {
     }
   };
 
-  const ReserveBtn = () => {
-    if (!reserved && !owner) {
-      return (
-        <>
-          <Button variant="primary" onClick={reserveProduct}>
-            Забронировать
-          </Button>
-        </>
-      );
-    } else if (owner) {
-      return (
-        <>
-          <Button variant="warning" onClick={handleModalEditProductShow}>
-            Редактировать
-          </Button>
-          <Button variant="danger" onClick={deleteProduct}>
-            Удалить
-          </Button>
-          <EditWishlistProductModal
-            id={id}
-            substitutable={substitutable}
-            reserved={reserved}
-            productName={name}
-            show={modalEditProductShow}
-            onHide={handleModalEditProductClose}
-          />
-        </>
-      );
-    } else {
-      return <></>;
-    }
-  };
+  // const ReserveBtn = () => {
+  //   if (!reserved && !owner) {
+  //     return (
+  //       <>
+  //         <Button variant="primary" onClick={reserveProduct}>
+  //           Забронировать
+  //         </Button>
+  //       </>
+  //     );
+  //   } else if (owner) {
+  //     return (
+  //       <>
+  //         <Button variant="warning" onClick={handleModalEditProductShow}>
+  //           Редактировать
+  //         </Button>
+  //         <Button variant="danger" onClick={deleteProduct}>
+  //           Удалить
+  //         </Button>
+  //         <EditWishlistProductModal
+  //           id={id}
+  //           substitutable={substitutable}
+  //           reserved={reserved}
+  //           productName={name}
+  //           show={modalEditProductShow}
+  //           onHide={handleModalEditProductClose}
+  //         />
+  //       </>
+  //     );
+  //   } else {
+  //     return <></>;
+  //   }
+  // };
 
-  return (
-    <>
-      <Card key={id} bg={card_bg}>
-        <Card.Body>
-          <Card.Title>{name}</Card.Title>
-          <Card.Text>
-            Создан: {createdAtStr}
-            <br />
-            Заменяем: {substitutable ? "да" : "нет"}
-            <br />
-          </Card.Text>
-          <Card.Link href={url}>Посмотреть товар</Card.Link>
-          <br />
-          <hr />
-          <ReserveBtn />
-        </Card.Body>
-      </Card>
-    </>
-  );
+  return
+  // (
+  //   <>
+  //     <Card key={id} bg={card_bg}>
+  //       <Card.Body>
+  //         <Card.Title>{name}</Card.Title>
+  //         <Card.Text>
+  //           Создан: {createdAtStr}
+  //           <br />
+  //           Заменяем: {substitutable ? "да" : "нет"}
+  //           <br />
+  //         </Card.Text>
+  //         <Card.Link href={url}>Посмотреть товар</Card.Link>
+  //         <br />
+  //         <hr />
+  //         <ReserveBtn />
+  //       </Card.Body>
+  //     </Card>
+  //   </>
+  // );
 }
 
 export default DetailProductCard;

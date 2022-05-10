@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import NewAuthentication from "./auth/authentication";
 import {anonymousUser, AuthContext, tokenInfo, TokenContext} from "./auth/auth-context";
 import HealthCheck from "./health-check";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NavbarC from "./navbar";
 import Wishlist from "./wishlist/listWishlists";
 import DetailWishlistCard from "./wishlist/detailWishlistCard";
@@ -12,7 +12,7 @@ function App() {
   const [TokenState, setTokenState] = useState(tokenInfo);
 
   return (
-    <Router>
+    <BrowserRouter>
       <TokenContext.Provider value ={[TokenState, setTokenState]}>
         <AuthContext.Provider value={[AuthState, setAuthState]}>
           <HealthCheck />
@@ -21,19 +21,17 @@ function App() {
             authenticated={AuthState.authenticated}
             username={AuthState.username}
           />
-          <Switch>
-            <Route exact path="/">
-              <Wishlist />
-            </Route>
+          <Routes>
+            <Route path="/" element={<Wishlist />}/>
             <Route
               path="/wishlist/:id"
-              children={<DetailWishlistCard userId={AuthState.user_id} />}
+              element={<DetailWishlistCard userId={AuthState.user_id} />}
             />
-            <Route path="/:page" children={<Wishlist />} />
-          </Switch>
+            <Route path="/:page" element={<Wishlist />} />
+          </Routes>
         </AuthContext.Provider>
       </TokenContext.Provider>
-    </Router>
+    </BrowserRouter>
   );
 }
 

@@ -1,4 +1,4 @@
-import {Button, FormCheck, FormControl, FormGroup, Modal} from "react-bootstrap";
+// import {Button, FormCheck, FormControl, FormGroup, Modal} from "react-bootstrap";
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -35,47 +35,48 @@ function EditWishlistProductModal(props) {
     }
   };
 
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton closeLabel="Закрыть">
-        <Modal.Title id="contained-modal-title-vcenter">
-          Редактирование позиции
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <FormGroup size="sm" className="mb-3">
-          <FormCheck
-            type="switch"
-            label="Резервирован"
-            id="reserved-switch"
-            checked={reserved}
-            onChange={() => setProductReserved(!reserved)}
-          />
-          <FormCheck
-            type="switch"
-            label="Заменяем"
-            id="substitutable-switch"
-            checked={substitutable}
-            onChange={() => setProductSubstitutable(!substitutable)}
-          />
-          <FormControl
-            aria-label="Small"
-            aria-describedby="inputGroup-sizing-sm"
-            placeholder={props.productName}
-            onChange={(e) => handleProductNameChange(e)}
-          />
-        </FormGroup>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={updateProduct}>Сохранить</Button>
-      </Modal.Footer>
-    </Modal>
-  );
+  return
+  // (
+  //   <Modal
+  //     {...props}
+  //     size="lg"
+  //     aria-labelledby="contained-modal-title-vcenter"
+  //     centered
+  //   >
+  //     <Modal.Header closeButton closeLabel="Закрыть">
+  //       <Modal.Title id="contained-modal-title-vcenter">
+  //         Редактирование позиции
+  //       </Modal.Title>
+  //     </Modal.Header>
+  //     <Modal.Body>
+  //       <FormGroup size="sm" className="mb-3">
+  //         <FormCheck
+  //           type="switch"
+  //           label="Резервирован"
+  //           id="reserved-switch"
+  //           checked={reserved}
+  //           onChange={() => setProductReserved(!reserved)}
+  //         />
+  //         <FormCheck
+  //           type="switch"
+  //           label="Заменяем"
+  //           id="substitutable-switch"
+  //           checked={substitutable}
+  //           onChange={() => setProductSubstitutable(!substitutable)}
+  //         />
+  //         <FormControl
+  //           aria-label="Small"
+  //           aria-describedby="inputGroup-sizing-sm"
+  //           placeholder={props.productName}
+  //           onChange={(e) => handleProductNameChange(e)}
+  //         />
+  //       </FormGroup>
+  //     </Modal.Body>
+  //     <Modal.Footer>
+  //       <Button onClick={updateProduct}>Сохранить</Button>
+  //     </Modal.Footer>
+  //   </Modal>
+  // );
 }
 
 export default EditWishlistProductModal;

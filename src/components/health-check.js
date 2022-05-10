@@ -1,5 +1,5 @@
 import { useHealthCheck } from "@webscopeio/react-health-check";
-import { Modal } from "react-bootstrap";
+// import { Modal } from "react-bootstrap";
 import React from "react";
 
 const { REACT_APP_HEALTH_URL } = process.env;
@@ -27,11 +27,7 @@ function HealthCheck() {
     return null;
   } else {
     return (
-      <Modal show={true} backdrop="static" keyboard={false}>
-        <Modal.Title>
-          <center>Сервис временно недоступен</center>
-        </Modal.Title>
-      </Modal>
+      <center>Сервис временно недоступен</center>
     );
   }
 }
