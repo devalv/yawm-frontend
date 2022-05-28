@@ -11,16 +11,11 @@ export default function HealthCheck() {
       name: "yawm-backend",
       url: REACT_APP_HEALTH_URL,
     },
-    onError: ({ service, timestamp }) => {
-      console.error(
-        `Service "${service.name}" is not available since "${timestamp}" 😔`
-      );
-    },
     refreshInterval: 25000,
   });
   if (!available) {
     setErrorState(errorState.anyError);
     return <center><h2>Сервис временно недоступен</h2></center>;
   }
-
+  return null;
 }

@@ -32,7 +32,7 @@ export default function ErrorModal() {
               К моему сожалению что-то пошло не так.
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Вы уже передали мне первоначальную информацию об ошибке, постараюсь исправить это в ближайшее время.
+              Постараюсь исправить это в ближайшее время.
               Если вы хотите сообщить что-то дополнительное, можно&nbsp;
               <a href="mailto:yawm@devyatkin.dev?subject=Ваша кривуля не работает!">написать на почту</a>
             </Typography>

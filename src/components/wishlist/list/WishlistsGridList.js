@@ -5,15 +5,13 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 import WishlistItem from "./WishlistGridItem";
-import { ErrorContext, errorState } from '../../GlobalContext';
+
 
 export default function NestedWishlistsGrid() {
   const { REACT_APP_API_V1_URL } = process.env;
-
-  const { setErrorState } = React.useContext(ErrorContext);
-  const [wishlists, setWishlist] = React.useState([]);
-
   const { page } = useParams();
+
+  const [wishlists, setWishlist] = React.useState([]);
   const [paginationInfo, setPaginationInfo] = React.useState({
     next: null,
     prev: null,
@@ -47,16 +45,13 @@ export default function NestedWishlistsGrid() {
       const producerWishlistEndpoint = page
         ? `${REACT_APP_API_V1_URL}/wishlist?size=11&page=${page}`
         : `${REACT_APP_API_V1_URL}/wishlist?size=11`;
-      try {
-        await axios.get(producerWishlistEndpoint).then((response) => {
-          setWishlist(response.data.items);
-          extractPaginationPages(response.data.links);
-          // TODO: @devalv show pagination buttons
-          console.debug(paginationInfo);
-        });
-      } catch (err) {
-        setErrorState(errorState.anyError);
-      }
+
+      await axios.get(producerWishlistEndpoint).then((response) => {
+        setWishlist(response.data.items);
+        extractPaginationPages(response.data.links);
+        // TODO: @devalv show pagination buttons
+        console.debug(paginationInfo);
+      });
     };
 
     getWishlists();
@@ -73,7 +68,6 @@ export default function NestedWishlistsGrid() {
           ))}
         </Grid>
       </Grid>
-      {/* TODO: @devalv это должен быть компонент на самом верхнем уровне чей параметр можно менять из всего приложения */}
     </Box>
   );
 }
