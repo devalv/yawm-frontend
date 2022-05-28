@@ -3,6 +3,9 @@
   "version": "0.3.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/material": "^5.8.1",
     "@sentry/react": "^6.19.7",
     "@sentry/tracing": "^6.19.7",
     "@testing-library/jest-dom": "^5.16.4",
