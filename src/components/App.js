@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import axios from 'axios';
 import { ErrorContext, errorState } from './GlobalContext';
 import ErrorModal from './ErrorModal';
-import HealthCheck from "./HealthCheck";
 // import NewAuthentication from "./auth/authentication";
 // import {anonymousUser, AuthContext, tokenInfo, TokenContext} from "./auth/auth-context";
 // import NavbarC from "./navbar";
@@ -25,7 +24,6 @@ function App() {
 
   return (
     <ErrorContext.Provider value={ErrorsContextProviderValue}>
-        <HealthCheck />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<NestedWishlistsGrid />}/>
@@ -33,7 +31,6 @@ function App() {
             {/*  path="/wishlist/:id" */}
             {/*  element={<DetailWishlistCard userId={AuthState.user_id} />} */}
             {/* /> */}
-            <Route path="/:page" element={<NestedWishlistsGrid />} />
           </Routes>
         </BrowserRouter>
         <ErrorModal />
