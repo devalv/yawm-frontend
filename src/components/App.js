@@ -5,7 +5,7 @@ import { ErrorContext, errorState } from './GlobalContext';
 import ErrorModal from './ErrorModal';
 // import NewAuthentication from "./auth/authentication";
 // import {anonymousUser, AuthContext, tokenInfo, TokenContext} from "./auth/auth-context";
-// import NavbarC from "./navbar";
+import ButtonAppBar from './Navbar';
 
 import NestedWishlistsGrid from "./wishlist/list/WishlistsGridList";
 // import DetailWishlistCard from "./wishlist/detailWishlistCard";
@@ -24,6 +24,7 @@ function App() {
 
   return (
     <ErrorContext.Provider value={ErrorsContextProviderValue}>
+        <ButtonAppBar/>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<NestedWishlistsGrid />}/>

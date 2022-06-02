@@ -1,6 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import Container from '@mui/material/Container';
 import axios from "axios";
 
 import Stack from '@mui/material/Stack';
@@ -29,7 +30,7 @@ export default function NestedWishlistsGrid() {
     getWishlists();
   }, [selectedPage]);
   return (
-    <>
+    <Container>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={1}>
           <Grid container item spacing={{ xs: 2, md: 4, lg: 6 }} columns={{ xs: 4, sm: 8, md: 12, lg: 20}}>
@@ -45,6 +46,6 @@ export default function NestedWishlistsGrid() {
       <Stack spacing={2}>
         <Pagination count={pagesCount} page={selectedPage || 1} onChange={handlePageChange} hideNextButton hidePrevButton color="primary"/>
     </Stack>
-    </>
+      </Container>
   );
 }
