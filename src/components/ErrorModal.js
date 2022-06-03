@@ -37,10 +37,7 @@ export default function ErrorModal() {
               <a href="mailto:yawm@devyatkin.dev?subject=Ваша кривуля не работает!">написать на почту</a>
             </Typography>
           </Box>
-
         </Modal>
-
       </div>
-
   );
 }
