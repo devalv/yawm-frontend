@@ -58,7 +58,7 @@ export default function SignUpModal({props}) {
           <Typography component="h1" variant="h5">
             Регистрация
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -70,6 +70,11 @@ export default function SignUpModal({props}) {
                   name="username"
                   autoComplete="username"
                   autoFocus
+                  inputProps={{
+                    minLength: 5,
+                    maxLength: 11,
+                    pattern: ".{5,11}",
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -81,6 +86,11 @@ export default function SignUpModal({props}) {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  inputProps={{
+                    minLength: 6,
+                    maxLength: 24,
+                    pattern: ".{6,24}",
+                  }}
                 />
               </Grid>
             </Grid>

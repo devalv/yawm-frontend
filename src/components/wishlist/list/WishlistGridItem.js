@@ -46,7 +46,6 @@ export default function WishlistItem({props}) {
                 Автор: {props.username}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {/* Создан: {props.created_at}  /!* TODO: исправить формат даты *!/ */}
                 Создан: {creationDelta}
               </Typography>
             </Grid>

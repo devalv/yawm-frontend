@@ -29,6 +29,7 @@ const style = {
 
 export default function SignInModal({props}) {
   const handleSubmit = (event) => {
+    console.log(event);
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
@@ -60,7 +61,7 @@ export default function SignInModal({props}) {
           <Typography component="h1" variant="h5">
             Вход
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -80,7 +81,7 @@ export default function SignInModal({props}) {
               type="password"
               id="password"
               autoComplete="current-password"
-            />
+             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Запомнить меня"
