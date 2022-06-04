@@ -9,6 +9,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import SignInModal from './auth/modals/SingIn';
 import SignUpModal from './auth/modals/SingUp';
 import { AuthContext } from './GlobalContext';
+import { simpleLogout } from './auth/Logout';
 
 
 function UserAuthButton() {
@@ -21,8 +22,7 @@ function UserAuthButton() {
   const handleModalUserRegisterClose = () => setModalUserRegisterShow(false);
 
   if (AuthState.authenticated) {
-    // TODO: @devalv call logout func
-    return <Button color="inherit">Выйти</Button>;
+    return <Button color="inherit" onClick={simpleLogout}>Выйти</Button>;
   }
   return (
     <>

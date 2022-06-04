@@ -1,10 +1,11 @@
 import * as React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { ErrorContext, errorState, AuthContext, authState } from './GlobalContext';
+import { simpleLogout } from './auth/Logout';
 import ErrorModal from './ErrorModal';
 import ButtonAppBar from './Navbar';
-
 import NestedWishlistsGrid from "./wishlist/list/WishlistsGridList";
 // import DetailWishlistCard from "./wishlist/detailWishlistCard";
 
@@ -15,15 +16,20 @@ function App() {
   const ErrorsContextProviderValue = React.useMemo(() => ({ErrorState, setErrorState}), [ErrorState]);
 
   // Auth
-  const [AuthState, setAuthState] = React.useState(authState.anonymousUser);
+  const accessTokenCookie = Cookies.get("access_token");
+  let authStateInitial = authState.anonymousUser;
+  if (accessTokenCookie) {
+    authState.loggedInUser.accessToken = accessTokenCookie;
+    authStateInitial = authState.loggedInUser;
+  }
+  const [AuthState, setAuthState] = React.useState(authStateInitial);
   const AuthContextProviderValue = React.useMemo(() => ({AuthState, setAuthState}), [AuthState]);
 
   // Interceptors
   axios.interceptors.response.use((response) => response, (error) => {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     if (error.response.status === 401) {
-      console.info('Bad auth. Need to logout');
-      // TODO: @devalv check auth state and logout
+      simpleLogout();
     } else if (error.response.status !== 400) {
       setErrorState(errorState.anyError);
     }
@@ -39,12 +45,10 @@ function App() {
         authState.loggedInUser.userId = response.data.id;
         authState.loggedInUser.username = response.data.username;
         setAuthState(authState.loggedInUser);
-        // TODO: @devalv save AuthState to cookie or store?
-        // Cookies.set("access_token", data["access_token"], { expires: 1, secure: true , sameSite: 'strict' });
+        // TODO: @devalv все говорит о том, что придется вкорячить CSRF и слать в целом не через заголовки, а через куки + использовать httpOnly: true?
+        Cookies.set("access_token", authState.loggedInUser.accessToken, { expires: 1/48, secure: true , sameSite: 'strict' });
       }).catch(() => {
-        // TODO: @call logout func
-        // TODO: @devalv при logout изменить настройки axios.defaults.headers
-        setAuthState(authState.anonymousUser);
+        simpleLogout();
       });
     };
     if ((AuthState.authenticated === true) && (AuthState.accessToken)) {
