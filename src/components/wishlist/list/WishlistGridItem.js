@@ -2,9 +2,13 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { Button } from '@mui/material';
+import { Button, } from '@mui/material';
 import { formatRelative, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import axios from 'axios';
+import { AuthContext } from '../../GlobalContext';
 
 
 function generateDarkColorHex() {
@@ -19,6 +23,32 @@ function generateLightColorHex() {
   for (let i = 0; i < 3; i += 1)
     color += (`0${  Math.floor(((1 + Math.random()) * 16**2) / 2).toString(16)}`).slice(-2);
   return color;
+}
+
+function ActionButtons({props}) {
+  const { AuthState } = React.useContext(AuthContext);
+  const handleDelete = async () => {
+    const { REACT_APP_API_V1_URL } = process.env;
+    const deleteEndpoint = `${REACT_APP_API_V1_URL}/wishlist/${props.id}`;
+    await axios.delete(deleteEndpoint);
+    window.location.reload();
+  };
+
+  // Only owner can delete card
+  if ((AuthState.authenticated) && (props.username === AuthState.username)) {
+    return (
+        <IconButton
+        size="large"
+        edge="start"
+        color="inherit"
+        aria-label="menu"
+        onClick={handleDelete}
+        >
+          <DeleteIcon color="error"/>
+        </IconButton>
+    );
+  }
+  return null;
 }
 
 export default function WishlistItem({props}) {
@@ -55,12 +85,9 @@ export default function WishlistItem({props}) {
               </Typography>
             </Grid>
           </Grid>
-          {/* TODO: кнопка удалить для автора */}
-          {/* <Grid item> */}
-          {/*  <Typography variant="subtitle1" component="div"> */}
-          {/*    $19.00 */}
-          {/*  </Typography> */}
-          {/* </Grid> */}
+          <Grid item>
+            <ActionButtons props={{ username: props.username, id: props.id}}/>
+          </Grid>
         </Grid>
       </Grid>
     </Paper>

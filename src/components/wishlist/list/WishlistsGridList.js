@@ -7,10 +7,12 @@ import axios from "axios";
 import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
 import WishlistItem from "./WishlistGridItem";
+import { AuthContext } from '../../GlobalContext';
 
 
 export default function NestedWishlistsGrid() {
   const { REACT_APP_API_V1_URL } = process.env;
+  const { AuthState } = React.useContext(AuthContext);
   // Pagination
   const [selectedPage, setSelectedPage] = React.useState(1);
   const [pagesCount, setPagesCount] =  React.useState(1);
@@ -28,8 +30,7 @@ export default function NestedWishlistsGrid() {
       });
     };
     getWishlists();
-    // TODO: @devalv добавить в зависимости AuthState
-  }, [selectedPage]);
+  }, [selectedPage, AuthState]);
   return (
     <Container>
       <Box sx={{ flexGrow: 1 }}>
