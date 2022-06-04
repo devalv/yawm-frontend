@@ -7,4 +7,3 @@ export function simpleLogout() {
   axios.defaults.headers.common.Authorization = null;
   window.location.reload();
 };
-

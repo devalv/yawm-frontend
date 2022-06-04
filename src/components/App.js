@@ -28,9 +28,9 @@ function App() {
   // Interceptors
   axios.interceptors.response.use((response) => response, (error) => {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
-    if (error.response.status === 401) {
+    if ((error.response.status === 401) && (AuthState.authenticated === true)){
       simpleLogout();
-    } else if (error.response.status !== 400) {
+    } else if ((error.response.status !== 400) && (error.response.status !== 422) && (error.response.status !== 401)) {
       setErrorState(errorState.anyError);
     }
     return Promise.reject(error);
