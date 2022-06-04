@@ -28,6 +28,7 @@ export default function NestedWishlistsGrid() {
       });
     };
     getWishlists();
+    // TODO: @devalv добавить в зависимости AuthState
   }, [selectedPage]);
   return (
     <Container>

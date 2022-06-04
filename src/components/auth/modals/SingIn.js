@@ -11,6 +11,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Modal from "@mui/material/Modal";
+import axios from 'axios';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import { AuthContext, authState } from '../../GlobalContext';
 
 const style = {
   position: "absolute",
@@ -27,26 +31,54 @@ const style = {
   display: 'flex',
 };
 
+function ErrorStack({props}) {
+  if (!props.authErrorState) {
+    return null;
+  }
+  return (
+    <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="error">Не удалось войти</Alert>
+    </Stack>
+  );
+}
+
 export default function SignInModal({props}) {
-  const handleSubmit = (event) => {
-    console.log(event);
+  const { setAuthState } = React.useContext(AuthContext);
+  const [authErrorState, setAuthErrorState] = React.useState(false);
+
+  const handleSubmit = async (event) => {
+    const { REACT_APP_API_V2_URL } = process.env;
+    const loginEndpoint = `${REACT_APP_API_V2_URL}/token`;
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('username'),
-      password: data.get('password'),
+    await axios.post(loginEndpoint, data).then((response) => {
+      // Set user access token to AuthContext
+      authState.loggedInUser.accessToken = response.data.access_token;
+      setAuthState(authState.loggedInUser);
+      setAuthErrorState(false);
+      props.closeHandler();
+    }).catch((error) => {
+      if ((error.response.status === 400) || ((error.response.status === 401))){
+        setAuthErrorState(true);
+      }
     });
+  };
+
+  const handleClose = () => {
+    setAuthErrorState(false);
+    props.closeHandler();
   };
 
   const handleShowRegister = () => {
     props.closeHandler();
     props.openRegisterHandler();
+    setAuthErrorState(false);
   };
 
   return (
     <Modal
       open={props.openState}
-      onClose={props.closeHandler}
+      onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -86,6 +118,7 @@ export default function SignInModal({props}) {
               control={<Checkbox value="remember" color="primary" />}
               label="Запомнить меня"
             />
+            <ErrorStack props={{authErrorState}}/>
             <Button
               type="submit"
               fullWidth
