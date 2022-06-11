@@ -7,7 +7,7 @@ import { simpleLogout } from './auth/Logout';
 import ErrorModal from './ErrorModal';
 import ButtonAppBar from './Navbar';
 import NestedWishlistsGrid from "./wishlist/list/WishlistsGridList";
-// import DetailWishlistCard from "./wishlist/detailWishlistCard";
+import WishlistDetailCard from './wishlist/detail/WishlistDetailCard';
 
 
 function App() {
@@ -66,10 +66,10 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<NestedWishlistsGrid />}/>
-            {/* <Route */}
-            {/*  path="/wishlist/:id" */}
-            {/*  element={<DetailWishlistCard userId={AuthState.user_id} />} */}
-            {/* /> */}
+             <Route
+              path="/wishlist/:id"
+              element={<WishlistDetailCard />}
+             />
           </Routes>
         </BrowserRouter>
         <ErrorModal />

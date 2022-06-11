@@ -30,8 +30,8 @@ function generateLightColorHex() {
 function ActionButtons({props}) {
   const { AuthState } = React.useContext(AuthContext);
   const handleDelete = async () => {
-    const { REACT_APP_API_V1_URL } = process.env;
-    const deleteEndpoint = `${REACT_APP_API_V1_URL}/wishlist/${props.id}`;
+    const { REACT_APP_API_V2_URL } = process.env;
+    const deleteEndpoint = `${REACT_APP_API_V2_URL}/wishlist-products/${props.id}`;
     await axios.delete(deleteEndpoint);
     window.location.reload();
   };
@@ -53,8 +53,21 @@ function ActionButtons({props}) {
   return null;
 }
 
-export default function WishlistItem({props}) {
-  const creationDelta = formatRelative(parseISO(props.created_at), new Date(), { locale: ru });
+// TODO: @devalv зарезервировать
+// TODO: @devalv отредактировать
+// TODO: @devalv показывать что товар уже зарезервирован
+
+export default function ProductItem({props}) {
+  const productInfo = props.product;
+  const {username} = props;
+  const creationDelta = formatRelative(parseISO(productInfo.created_at), new Date(), { locale: ru });
+  let updateDelta = "никогда";
+  if (productInfo.updated_at !== null){
+    updateDelta = formatRelative(parseISO(productInfo.updated_at), new Date(), { locale: ru });
+  }
+  const reserved = productInfo.reserved ? "Да": "Нет";
+  const substitutable = productInfo.substitutable ? "Да": "Нет";
+
   return (
     <Paper
       sx={{
@@ -72,23 +85,29 @@ export default function WishlistItem({props}) {
           <Grid item xs container direction="column" spacing={2}>
             <Grid item xs>
               <Typography gutterBottom variant="subtitle1" component="div">
-                <h3>{props.name}</h3>
-              </Typography>
-              <Typography variant="body2" gutterBottom>
-                Автор: {props.username}
+                <h3>{productInfo.name}</h3>
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 Создан: {creationDelta}
               </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Отредактирован: {updateDelta}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Зарезервирован: {reserved}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Заменяем: {substitutable}
+              </Typography>
             </Grid>
             <Grid item>
               <Typography sx={{ cursor: 'pointer' }} variant="body2">
-                <Button size="small" href={`/wishlist/${props.id}`}>Посмотреть</Button>
+                <Button size="small" href={productInfo.url}>Посмотреть</Button>
               </Typography>
             </Grid>
           </Grid>
           <Grid item>
-            <ActionButtons props={{ username: props.username, id: props.id}}/>
+            <ActionButtons props={{ username, id: productInfo.id}}/>
           </Grid>
         </Grid>
       </Grid>

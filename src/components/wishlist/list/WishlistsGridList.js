@@ -9,6 +9,7 @@ import Pagination from '@mui/material/Pagination';
 import WishlistItem from "./WishlistGridItem";
 import { AuthContext } from '../../GlobalContext';
 
+// TODO: @devalv add wishlist
 
 export default function NestedWishlistsGrid() {
   const { REACT_APP_API_V1_URL } = process.env;
@@ -47,7 +48,7 @@ export default function NestedWishlistsGrid() {
       <br/>
       <Stack spacing={2}>
         <Pagination count={pagesCount} page={selectedPage || 1} onChange={handlePageChange} hideNextButton hidePrevButton color="primary"/>
-    </Stack>
-      </Container>
+      </Stack>
+    </Container>
   );
 }

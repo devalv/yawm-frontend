@@ -1,6 +1,5 @@
 import * as React from "react";
 
-// TODO: @devalv use types?
 export const errorState = {
   anyError: {
     showErrorModal: true
@@ -16,7 +15,6 @@ export const ErrorContext = React.createContext({
 });
 
 
-// TODO: @devalv use types?
 export const authState = {
   anonymousUser: {
     username: null,
