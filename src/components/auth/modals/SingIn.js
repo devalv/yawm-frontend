@@ -12,7 +12,7 @@ import Modal from "@mui/material/Modal";
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import { AuthContext, authState } from '../../GlobalContext';
+import { AuthContext } from '../../GlobalContext';
 
 const style = {
   position: "absolute",
@@ -41,7 +41,7 @@ function ErrorStack({props}) {
 }
 
 export default function SignInModal({props}) {
-  const { setAuthState } = React.useContext(AuthContext);
+  const { AuthState, setAuthState } = React.useContext(AuthContext);
   const [authErrorState, setAuthErrorState] = React.useState(false);
 
   const handleSubmit = async (event) => {
@@ -51,8 +51,11 @@ export default function SignInModal({props}) {
     const data = new FormData(event.currentTarget);
     await axios.post(loginEndpoint, data).then((response) => {
       // Set user access token to AuthContext
-      authState.loggedInUser.accessToken = response.data.access_token;
-      setAuthState(authState.loggedInUser);
+      setAuthState({
+          ...AuthState,
+          accessToken: response.data.access_token,
+          authenticated: true
+      });
       setAuthErrorState(false);
       props.closeHandler();
     }).catch((error) => {

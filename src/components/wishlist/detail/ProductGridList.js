@@ -3,10 +3,6 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import ProductItem from './ProductGridItem';
 
-// TODO: @devalv remove product
-// TODO: @devalv edit product
-// TODO: @devalv reserve product
-
 
 export default function NestedProductGridList({props}) {
 

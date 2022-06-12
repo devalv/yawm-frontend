@@ -31,7 +31,7 @@ export default function NestedWishlistsGrid() {
       });
     };
     getWishlists();
-  }, [selectedPage, AuthState]);
+  }, [selectedPage, AuthState.authenticated]);
   return (
     <Container>
       <Box sx={{ flexGrow: 1 }}>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { Button, } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, Tooltip } from '@mui/material';
 import { formatRelative, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import IconButton from '@mui/material/IconButton';
@@ -38,9 +38,8 @@ function ActionButtons({props}) {
   return null;
 }
 
-// TODO: @devalv зарезервировать
-// TODO: @devalv отредактировать
-// TODO: @devalv показывать что товар уже зарезервирован
+// TODO: @devalv remove product
+// TODO: @devalv edit product
 
 export default function ProductItem({props}) {
   const productInfo = props.product;
@@ -50,8 +49,20 @@ export default function ProductItem({props}) {
   if (productInfo.updated_at !== null){
     updateDelta = formatRelative(parseISO(productInfo.updated_at), new Date(), { locale: ru });
   }
-  const reserved = productInfo.reserved ? "Да": "Нет";
-  const substitutable = productInfo.substitutable ? "Да": "Нет";
+  const reservedLabel = productInfo.reserved ? "Зарезервирован": "Зарезервировать";
+  const [checkboxState, setCheckboxState] = React.useState({
+    reserved: productInfo.reserved
+  });
+
+  const handleReserve = async (event) => {
+    setCheckboxState({
+      ...checkboxState,
+      [event.target.name]: event.target.checked,
+    });
+    const { REACT_APP_API_V2_URL } = process.env;
+    const reserveEndpoint = `${REACT_APP_API_V2_URL}/wishlist-products/${productInfo.id}/reserve`;
+    await axios.patch(reserveEndpoint);
+  };
 
   return (
     <Paper
@@ -72,22 +83,21 @@ export default function ProductItem({props}) {
               <Typography gutterBottom variant="subtitle1" component="div">
                 <h3>{productInfo.name}</h3>
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body1" color="text.secondary">
                 Создан: {creationDelta}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body1" color="text.secondary">
                 Отредактирован: {updateDelta}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Зарезервирован: {reserved}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Заменяем: {substitutable}
-              </Typography>
+              <Tooltip title="Если стоит галочка, значит кто-то уже занял товар.">
+                <Typography ml={-2}  color="text.secondary">
+                   <FormControlLabel name="reserved" onChange={handleReserve} sx={{ gap: 0, mt: -1 }} labelPlacement="start" disabled={checkboxState.reserved} control={<Checkbox />} checked={checkboxState.reserved} label={reservedLabel} />
+                </Typography>
+              </Tooltip>
             </Grid>
             <Grid item>
               <Typography sx={{ cursor: 'pointer' }} variant="body2">
-                <Button size="small" href={productInfo.url}>Посмотреть</Button>
+                <Button size="small" variant="outlined" href={productInfo.url}>Посмотреть товар</Button>
               </Typography>
             </Grid>
           </Grid>

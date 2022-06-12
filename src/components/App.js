@@ -20,6 +20,7 @@ function App() {
   let authStateInitial = authState.anonymousUser;
   if (accessTokenCookie) {
     authState.loggedInUser.accessToken = accessTokenCookie;
+    authState.loggedInUser.authenticated = true;
     authStateInitial = authState.loggedInUser;
   }
   const [AuthState, setAuthState] = React.useState(authStateInitial);
@@ -42,11 +43,14 @@ function App() {
       const { REACT_APP_API_V2_URL } = process.env;
       const userInfoEndpoint = `${REACT_APP_API_V2_URL}/users/info`;
       await axios.get(userInfoEndpoint).then((response) => {
-        authState.loggedInUser.userId = response.data.id;
-        authState.loggedInUser.username = response.data.username;
-        setAuthState(authState.loggedInUser);
+        setAuthState({
+          ...AuthState,
+          userId: response.data.id,
+          username: response.data.username,
+          authenticated: true,
+        });
         // TODO: @devalv все говорит о том, что придется вкорячить CSRF и слать в целом не через заголовки, а через куки + использовать httpOnly: true?
-        Cookies.set("access_token", authState.loggedInUser.accessToken, { expires: 1/48, secure: true , sameSite: 'strict' });
+        Cookies.set("access_token", AuthState.accessToken, { expires: 1/48, secure: true , sameSite: 'strict' });
       }).catch(() => {
         simpleLogout();
       });
@@ -57,7 +61,7 @@ function App() {
       // Прочитать информацию о пользователе
       getUserInfo();
     }
-  }, [AuthState]);
+  }, [AuthState.authenticated]);
 
   return (
     <ErrorContext.Provider value={ErrorsContextProviderValue}>

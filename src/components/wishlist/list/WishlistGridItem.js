@@ -68,7 +68,7 @@ export default function WishlistItem({props}) {
             </Grid>
             <Grid item>
               <Typography sx={{ cursor: 'pointer' }} variant="body2">
-                <Button size="small" href={`/wishlist/${props.id}`}>Посмотреть</Button>
+                <Button size="small" variant="outlined" href={`/wishlist/${props.id}`}>Посмотреть список</Button>
               </Typography>
             </Grid>
           </Grid>
