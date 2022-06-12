@@ -9,23 +9,8 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import { AuthContext } from '../../GlobalContext';
+import { generateDarkColorHex, generateLightColorHex } from '../../Utils';
 
-
-// TODO: @devalv явно нужно вынести в отдельный файл с утилитами
-function generateDarkColorHex() {
-  let color = "#";
-  for (let i = 0; i < 3; i += 1)
-    color += (`0${  Math.floor(Math.random() * 16**2 / 2).toString(16)}`).slice(-2);
-  return color;
-}
-
-// TODO: @devalv явно нужно вынести в отдельный файл с утилитами
-function generateLightColorHex() {
-  let color = "#";
-  for (let i = 0; i < 3; i += 1)
-    color += (`0${  Math.floor(((1 + Math.random()) * 16**2) / 2).toString(16)}`).slice(-2);
-  return color;
-}
 
 function ActionButtons({props}) {
   const { AuthState } = React.useContext(AuthContext);
