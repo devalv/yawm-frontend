@@ -60,7 +60,7 @@ export default function ButtonAppBar() {
             <img alt="" src="/logo64.png" width="32" height="32"/>
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Yet another wishlist maker v.0.3
+            Мастер списков
           </Typography>
           <UserAuthButton/>
         </Toolbar>
