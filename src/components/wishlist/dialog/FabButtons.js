@@ -24,7 +24,7 @@ const editNameStyle = {
 
 export default function WishlistEditFab({props}) {
   const { AuthState } = React.useContext(AuthContext);
-  if (AuthState.authenticated) {
+  if ((AuthState.authenticated) && (props.username === AuthState.username)) {
     return (
       <>
       <Fab color="success" aria-label="edit" style={addProductStyle} onClick={props.showEditWishlistName}>

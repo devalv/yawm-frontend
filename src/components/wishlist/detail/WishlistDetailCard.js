@@ -57,9 +57,9 @@ export default function WishlistDetailCard() {
         </Typography>
       </Box>
       <NestedProductGridList props={{ "products": products, "username": wishlistInfo.username }}/>
-      <WishlistEditFab props={{showAddProduct: handleClickOpenAddProduct, showEditWishlistName: handleClickOpenEditWishlist}}/>
-      <ProductAddFormDialog props={{open: openAddProduct, handler: setAddProduct}}/>
-      <WishlistEditFormDialog props={{open: openEditWishlistName, handler: setEditWishlistName}}/>
+      <WishlistEditFab props={{showAddProduct: handleClickOpenAddProduct, showEditWishlistName: handleClickOpenEditWishlist, username: wishlistInfo.username}}/>
+      <ProductAddFormDialog props={{open: openAddProduct, handler: setAddProduct, username: wishlistInfo.username}}/>
+      <WishlistEditFormDialog props={{open: openEditWishlistName, handler: setEditWishlistName, username: wishlistInfo.username}}/>
     </Container>
   );
 }

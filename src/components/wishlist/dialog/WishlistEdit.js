@@ -44,7 +44,7 @@ export default function WishlistEditFormDialog({props}) {
     });
   };
 
-  if (AuthState.authenticated) {
+  if ((AuthState.authenticated) && (props.username === AuthState.username)) {
     return (
     <Dialog open={props.open} onClose={handleClose} component="form" onSubmit={handleSubmit}>
         <DialogTitle>Переименование списка</DialogTitle>
