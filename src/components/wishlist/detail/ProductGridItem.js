@@ -38,7 +38,6 @@ function ActionButtons({props}) {
   return null;
 }
 
-// TODO: @devalv remove product
 // TODO: @devalv edit product
 
 export default function ProductItem({props}) {

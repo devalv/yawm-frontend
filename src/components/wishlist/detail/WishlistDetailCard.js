@@ -8,14 +8,26 @@ import { ru } from 'date-fns/locale';
 import Box from '@mui/material/Box';
 import { AuthContext } from '../../GlobalContext';
 import NestedProductGridList from './ProductGridList';
+import ProductAddFormDialog from '../dialog/ProductAdd';
+import WishlistEditFab from '../dialog/FabButtons';
+import WishlistEditFormDialog from '../dialog/WishlistEdit';
 
-// TODO: @devalv add product
-// TODO: @devalv изменение названия вишлиста
 
 export default function WishlistDetailCard() {
   const { REACT_APP_API_V2_URL } = process.env;
   const { AuthState } = React.useContext(AuthContext);
   const { id } = useParams();
+
+  // Dialogs
+  const [openAddProduct, setAddProduct] = React.useState(false);
+  const [openEditWishlistName, setEditWishlistName] = React.useState(false);
+  const handleClickOpenAddProduct = () => {
+    setAddProduct(true);
+  };
+  const handleClickOpenEditWishlist = () => {
+    setEditWishlistName(true);
+  };
+
   // Products
   const [products, setProducts] = React.useState([]);
   const [wishlistInfo, setWishlistInfo] = React.useState({name: "", created_at: null, user_id: "", username: "", updated_at: null});
@@ -45,7 +57,9 @@ export default function WishlistDetailCard() {
         </Typography>
       </Box>
       <NestedProductGridList props={{ "products": products, "username": wishlistInfo.username }}/>
-
+      <WishlistEditFab props={{showAddProduct: handleClickOpenAddProduct, showEditWishlistName: handleClickOpenEditWishlist}}/>
+      <ProductAddFormDialog props={{open: openAddProduct, handler: setAddProduct}}/>
+      <WishlistEditFormDialog props={{open: openEditWishlistName, handler: setEditWishlistName}}/>
     </Container>
   );
 }
