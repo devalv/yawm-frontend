@@ -8,8 +8,8 @@ import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
 import WishlistItem from "./WishlistGridItem";
 import { AuthContext } from '../../GlobalContext';
+import WishlistAddFormDialog from '../dialog/WishlistAdd';
 
-// TODO: @devalv add wishlist
 
 export default function NestedWishlistsGrid() {
   const { REACT_APP_API_V1_URL } = process.env;
@@ -33,22 +33,25 @@ export default function NestedWishlistsGrid() {
     getWishlists();
   }, [selectedPage, AuthState.authenticated]);
   return (
-    <Container>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={1}>
-          <Grid container item spacing={{ xs: 2, md: 4, lg: 6 }} columns={{ xs: 4, sm: 8, md: 12, lg: 20}}>
-            {wishlists.map((wishlist) => (
-              <Grid item key={wishlist.id}>
-                  <WishlistItem props={wishlist}/>
-              </Grid>
-            ))}
+    <>
+      <Container>
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={1}>
+            <Grid container item spacing={{ xs: 2, md: 4, lg: 6 }} columns={{ xs: 4, sm: 8, md: 12, lg: 20}}>
+              {wishlists.map((wishlist) => (
+                <Grid item key={wishlist.id}>
+                    <WishlistItem props={wishlist}/>
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>
-      <br/>
-      <Stack spacing={2}>
-        <Pagination count={pagesCount} page={selectedPage || 1} onChange={handlePageChange} hideNextButton hidePrevButton color="primary"/>
-      </Stack>
-    </Container>
+        </Box>
+        <br/>
+        <Stack spacing={2}>
+          <Pagination count={pagesCount} page={selectedPage || 1} onChange={handlePageChange} hideNextButton hidePrevButton color="primary"/>
+        </Stack>
+      </Container>
+      <WishlistAddFormDialog/>
+    </>
   );
 }
