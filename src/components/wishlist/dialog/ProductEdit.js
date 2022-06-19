@@ -9,16 +9,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SendIcon from '@mui/icons-material/Send';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../GlobalContext';
 import ErrorStack from '../ErrorStack';
 
 
-export default function WishlistEditFormDialog({props}) {
-  const { id } = useParams();
+export default function ProductEditFormDialog({props}) {
   const { AuthState } = React.useContext(AuthContext);
 
-  const [wishlistName, setWishlistName] = React.useState();
+  const [productName, setProductName] = React.useState();
   const [errorState, setEditErrorState] = React.useState({ type: "", hasError: false});
 
   const handleClose = () => {
@@ -28,9 +26,9 @@ export default function WishlistEditFormDialog({props}) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const { REACT_APP_API_V1_URL } = process.env;
-    const editEndpoint = `${REACT_APP_API_V1_URL}/wishlist/${id}`;
-    const data = {"name": wishlistName};
+    const { REACT_APP_API_V2_URL } = process.env;
+    const editEndpoint = `${REACT_APP_API_V2_URL}/wishlist-products/${props.id}`;
+    const data = {"name": productName, "substitutable": false, "reserved": false};
     await axios.put(editEndpoint, data).then(() => {
       setEditErrorState({type: "", hasError: false  });
       handleClose();
@@ -47,21 +45,21 @@ export default function WishlistEditFormDialog({props}) {
   if ((AuthState.authenticated) && (props.username === AuthState.username)) {
     return (
     <Dialog open={props.open} onClose={handleClose} component="form" onSubmit={handleSubmit}>
-        <DialogTitle>Переименование списка</DialogTitle>
+        <DialogTitle>Переименование товара</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Укажите новое название списка
+            Укажите новое название товара
           </DialogContentText>
             <TextField
               autoFocus
               margin="dense"
-              id="wishlistName"
+              id="productName"
               label="Новое название"
               type="string"
               fullWidth
               variant="standard"
               required
-              onChange={e => setWishlistName(e.target.value)}
+              onChange={e => setProductName(e.target.value)}
             />
           <ErrorStack props={{errorState}}/>
         </DialogContent>

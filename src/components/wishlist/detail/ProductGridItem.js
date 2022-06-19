@@ -7,9 +7,11 @@ import { formatRelative, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { AuthContext } from '../../GlobalContext';
 import { generateDarkColorHex, generateLightColorHex } from '../../Utils';
+import ProductEditFormDialog from '../dialog/ProductEdit';
 
 
 function ActionButtons({props}) {
@@ -21,9 +23,25 @@ function ActionButtons({props}) {
     window.location.reload();
   };
 
+  // Dialog
+  const [openEditProduct, setEditProduct] = React.useState(false);
+  const handleShowEdit = async() => {
+    setEditProduct(true);
+  };
+
   // Only owner can delete card
   if ((AuthState.authenticated) && (props.username === AuthState.username)) {
     return (
+      <>
+        <IconButton
+        size="large"
+        edge="start"
+        color="inherit"
+        aria-label="menu"
+        onClick={handleShowEdit}
+        >
+          <EditIcon color="success"/>
+        </IconButton>
         <IconButton
         size="large"
         edge="start"
@@ -33,12 +51,12 @@ function ActionButtons({props}) {
         >
           <DeleteIcon color="error"/>
         </IconButton>
+        <ProductEditFormDialog props={{open: openEditProduct, handler: setEditProduct, username: props.username, id: props.id}}/>
+      </>
     );
   }
   return null;
 }
-
-// TODO: @devalv edit product
 
 export default function ProductItem({props}) {
   const productInfo = props.product;
