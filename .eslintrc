@@ -8,6 +8,7 @@
         "extensions": [".js", ".jsx"]
       }
     ],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "react/prop-types": 0,
     "no-underscore-dangle": 0,
     "import/imports-first": ["error", "absolute-first"],
@@ -26,5 +27,8 @@
     "Headers": true,
     "Request": true,
     "fetch": true
-  }
+  },
+  "env": {
+    "jest/globals": true
+}
 }

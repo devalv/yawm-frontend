@@ -15,9 +15,7 @@ export default function NestedProductGridList({ props }) {
         >
           {props.products.map((product) => (
             <Grid item key={product.id}>
-              <ProductItem
-                props={{ product: product, username: props.username }}
-              />
+              <ProductItem props={{ product, username: props.username }} />
             </Grid>
           ))}
         </Grid>

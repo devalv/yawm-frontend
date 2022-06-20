@@ -67,7 +67,7 @@ export default function WishlistDetailCard() {
         </Typography>
       </Box>
       <NestedProductGridList
-        props={{ products: products, username: wishlistInfo.username }}
+        props={{ products, username: wishlistInfo.username }}
       />
       <WishlistEditFab
         props={{
