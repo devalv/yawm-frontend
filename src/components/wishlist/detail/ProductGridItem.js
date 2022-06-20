@@ -13,8 +13,7 @@ import { AuthContext } from '../../GlobalContext';
 import { generateDarkColorHex, generateLightColorHex } from '../../Utils';
 import ProductEditFormDialog from '../dialog/ProductEdit';
 
-
-function ActionButtons({props}) {
+function ActionButtons({ props }) {
   const { AuthState } = React.useContext(AuthContext);
   const handleDelete = async () => {
     const { REACT_APP_API_V2_URL } = process.env;
@@ -25,50 +24,65 @@ function ActionButtons({props}) {
 
   // Dialog
   const [openEditProduct, setEditProduct] = React.useState(false);
-  const handleShowEdit = async() => {
+  const handleShowEdit = async () => {
     setEditProduct(true);
   };
 
   // Only owner can delete card
-  if ((AuthState.authenticated) && (props.username === AuthState.username)) {
+  if (AuthState.authenticated && props.username === AuthState.username) {
     return (
       <>
         <IconButton
-        size="large"
-        edge="start"
-        color="inherit"
-        aria-label="menu"
-        onClick={handleShowEdit}
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          onClick={handleShowEdit}
         >
-          <EditIcon color="success"/>
+          <EditIcon color="success" />
         </IconButton>
         <IconButton
-        size="large"
-        edge="start"
-        color="inherit"
-        aria-label="menu"
-        onClick={handleDelete}
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          onClick={handleDelete}
         >
-          <DeleteIcon color="error"/>
+          <DeleteIcon color="error" />
         </IconButton>
-        <ProductEditFormDialog props={{open: openEditProduct, handler: setEditProduct, username: props.username, id: props.id}}/>
+        <ProductEditFormDialog
+          props={{
+            open: openEditProduct,
+            handler: setEditProduct,
+            username: props.username,
+            id: props.id,
+          }}
+        />
       </>
     );
   }
   return null;
 }
 
-export default function ProductItem({props}) {
+export default function ProductItem({ props }) {
   const productInfo = props.product;
-  const {username} = props;
-  const creationDelta = formatRelative(parseISO(productInfo.created_at), new Date(), { locale: ru });
-  let updateDelta = "никогда";
-  if (productInfo.updated_at !== null){
-    updateDelta = formatRelative(parseISO(productInfo.updated_at), new Date(), { locale: ru });
+  const { username } = props;
+  const creationDelta = formatRelative(
+    parseISO(productInfo.created_at),
+    new Date(),
+    { locale: ru }
+  );
+  let updateDelta = 'никогда';
+  if (productInfo.updated_at !== null) {
+    updateDelta = formatRelative(parseISO(productInfo.updated_at), new Date(), {
+      locale: ru,
+    });
   }
-  const reservedLabel = productInfo.reserved ? "Зарезервирован": "Зарезервировать";
+  const reservedLabel = productInfo.reserved
+    ? 'Зарезервирован'
+    : 'Зарезервировать';
   const [checkboxState, setCheckboxState] = React.useState({
-    reserved: productInfo.reserved
+    reserved: productInfo.reserved,
   });
 
   const handleReserve = async (event) => {
@@ -90,7 +104,9 @@ export default function ProductItem({props}) {
         maxWidth: 450,
         flexGrow: 1,
         backgroundColor: (theme) =>
-          theme.palette.mode === 'dark' ? generateDarkColorHex() : generateLightColorHex(),
+          theme.palette.mode === 'dark'
+            ? generateDarkColorHex()
+            : generateLightColorHex(),
       }}
     >
       <Grid container spacing={2}>
@@ -107,19 +123,30 @@ export default function ProductItem({props}) {
                 Отредактирован: {updateDelta}
               </Typography>
               <Tooltip title="Если стоит галочка, значит кто-то уже занял товар.">
-                <Typography ml={-2}  color="text.secondary">
-                   <FormControlLabel name="reserved" onChange={handleReserve} sx={{ gap: 0, mt: -1 }} labelPlacement="start" disabled={checkboxState.reserved} control={<Checkbox />} checked={checkboxState.reserved} label={reservedLabel} />
+                <Typography ml={-2} color="text.secondary">
+                  <FormControlLabel
+                    name="reserved"
+                    onChange={handleReserve}
+                    sx={{ gap: 0, mt: -1 }}
+                    labelPlacement="start"
+                    disabled={checkboxState.reserved}
+                    control={<Checkbox />}
+                    checked={checkboxState.reserved}
+                    label={reservedLabel}
+                  />
                 </Typography>
               </Tooltip>
             </Grid>
             <Grid item>
               <Typography sx={{ cursor: 'pointer' }} variant="body2">
-                <Button size="small" variant="outlined" href={productInfo.url}>Посмотреть товар</Button>
+                <Button size="small" variant="outlined" href={productInfo.url}>
+                  Посмотреть товар
+                </Button>
               </Typography>
             </Grid>
           </Grid>
           <Grid item>
-            <ActionButtons props={{ username, id: productInfo.id}}/>
+            <ActionButtons props={{ username, id: productInfo.id }} />
           </Grid>
         </Grid>
       </Grid>

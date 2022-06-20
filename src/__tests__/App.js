@@ -4,5 +4,5 @@ import App from '../components/App';
 
 it('check navbar is in place', () => {
   render(<App />);
-  expect(screen.getByText("Мастер списков")).toBeInTheDocument();
+  expect(screen.getByText('Мастер списков')).toBeInTheDocument();
 }, 5);

@@ -8,19 +8,19 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Modal from "@mui/material/Modal";
+import Modal from '@mui/material/Modal';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 import axios from 'axios';
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
   flexDirection: 'column',
@@ -28,7 +28,7 @@ const style = {
   display: 'flex',
 };
 
-function ErrorStack({props}) {
+function ErrorStack({ props }) {
   if (props.loginState !== 'error') {
     return null;
   }
@@ -39,7 +39,7 @@ function ErrorStack({props}) {
   );
 }
 
-function SuccessStack({props}) {
+function SuccessStack({ props }) {
   if (props.loginState !== 'success') {
     return null;
   }
@@ -50,31 +50,41 @@ function SuccessStack({props}) {
   );
 }
 
-export default function SignUpModal({props}) {
-  const [loginState, setLoginState] = React.useState("halt");
+export default function SignUpModal({ props }) {
+  const [loginState, setLoginState] = React.useState('halt');
   const handleSubmit = async (event) => {
     const { REACT_APP_API_V2_URL } = process.env;
     const registerEndpoint = `${REACT_APP_API_V2_URL}/users/create`;
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const data = {"username": form.get("username"), "password": form.get("password")};
-    await axios.post(registerEndpoint, data).then(() => {
-      setLoginState("success");
-    }).catch((error) => {
-      if ((error.response.status === 422) || (error.response.status === 403) || (error.response.status === 400)){
-        setLoginState("error");
-      }
-    });
+    const data = {
+      username: form.get('username'),
+      password: form.get('password'),
+    };
+    await axios
+      .post(registerEndpoint, data)
+      .then(() => {
+        setLoginState('success');
+      })
+      .catch((error) => {
+        if (
+          error.response.status === 422 ||
+          error.response.status === 403 ||
+          error.response.status === 400
+        ) {
+          setLoginState('error');
+        }
+      });
   };
 
   const handleShowLogin = () => {
-    setLoginState("halt");
+    setLoginState('halt');
     props.closeHandler();
     props.openLoginHandler();
   };
 
   const handleClose = () => {
-    setLoginState("halt");
+    setLoginState('halt');
     props.closeHandler();
   };
 
@@ -87,9 +97,7 @@ export default function SignUpModal({props}) {
     >
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Box
-          sx={style}
-        >
+        <Box sx={style}>
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -111,7 +119,7 @@ export default function SignUpModal({props}) {
                   inputProps={{
                     minLength: 5,
                     maxLength: 11,
-                    pattern: ".{5,11}",
+                    pattern: '.{5,11}',
                   }}
                 />
               </Grid>
@@ -127,13 +135,13 @@ export default function SignUpModal({props}) {
                   inputProps={{
                     minLength: 6,
                     maxLength: 24,
-                    pattern: ".{6,24}",
+                    pattern: '.{6,24}',
                   }}
                 />
               </Grid>
             </Grid>
-            <ErrorStack props={{loginState}}/>
-            <SuccessStack props={{loginState}}/>
+            <ErrorStack props={{ loginState }} />
+            <SuccessStack props={{ loginState }} />
             <Button
               type="submit"
               fullWidth

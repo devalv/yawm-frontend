@@ -6,4 +6,4 @@ export function simpleLogout() {
   Cookies.remove('access_token');
   axios.defaults.headers.common.Authorization = null;
   window.location.reload();
-};
+}

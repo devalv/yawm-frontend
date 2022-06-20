@@ -11,26 +11,43 @@ import SignUpModal from './auth/modals/SingUp';
 import { AuthContext } from './GlobalContext';
 import { simpleLogout } from './auth/Logout';
 
-
 function UserAuthButton() {
   const { AuthState } = React.useContext(AuthContext);
   const [modalUserLoginShow, setModalUserLoginShow] = React.useState(false);
   const handleModalUserLoginShow = () => setModalUserLoginShow(true);
   const handleModalUserLoginClose = () => setModalUserLoginShow(false);
-  const [modalUserRegisterShow, setModalUserRegisterShow] = React.useState(false);
+  const [modalUserRegisterShow, setModalUserRegisterShow] =
+    React.useState(false);
   const handleModalUserRegisterShow = () => setModalUserRegisterShow(true);
   const handleModalUserRegisterClose = () => setModalUserRegisterShow(false);
 
   if (AuthState.authenticated) {
-    return <Button color="inherit" onClick={simpleLogout}>Выйти</Button>;
+    return (
+      <Button color="inherit" onClick={simpleLogout}>
+        Выйти
+      </Button>
+    );
   }
   return (
     <>
-      <SignInModal props={{"openState": modalUserLoginShow, "closeHandler": handleModalUserLoginClose, "openRegisterHandler": handleModalUserRegisterShow}}/>
-      <SignUpModal props={{"openState": modalUserRegisterShow, "closeHandler": handleModalUserRegisterClose, "openLoginHandler": handleModalUserLoginShow}}/>
-      <Button color="inherit" onClick={handleModalUserLoginShow}>Войти</Button>
+      <SignInModal
+        props={{
+          openState: modalUserLoginShow,
+          closeHandler: handleModalUserLoginClose,
+          openRegisterHandler: handleModalUserRegisterShow,
+        }}
+      />
+      <SignUpModal
+        props={{
+          openState: modalUserRegisterShow,
+          closeHandler: handleModalUserRegisterClose,
+          openLoginHandler: handleModalUserLoginShow,
+        }}
+      />
+      <Button color="inherit" onClick={handleModalUserLoginShow}>
+        Войти
+      </Button>
     </>
-
   );
 }
 
@@ -45,7 +62,9 @@ export default function ButtonAppBar() {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
-            onClick={() => window.open("https://github.com/devalv/yawm-frontend", "_blank")}
+            onClick={() =>
+              window.open('https://github.com/devalv/yawm-frontend', '_blank')
+            }
           >
             <GitHubIcon />
           </IconButton>
@@ -57,12 +76,12 @@ export default function ButtonAppBar() {
             sx={{ mr: 2 }}
             href="/"
           >
-            <img alt="" src="/logo64.png" width="32" height="32"/>
+            <img alt="" src="/logo64.png" width="32" height="32" />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Мастер списков
           </Typography>
-          <UserAuthButton/>
+          <UserAuthButton />
         </Toolbar>
       </AppBar>
     </Box>

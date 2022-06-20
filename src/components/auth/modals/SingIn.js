@@ -8,20 +8,20 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Modal from "@mui/material/Modal";
+import Modal from '@mui/material/Modal';
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { AuthContext } from '../../GlobalContext';
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
   flexDirection: 'column',
@@ -29,7 +29,7 @@ const style = {
   display: 'flex',
 };
 
-function ErrorStack({props}) {
+function ErrorStack({ props }) {
   if (!props.authErrorState) {
     return null;
   }
@@ -40,7 +40,7 @@ function ErrorStack({props}) {
   );
 }
 
-export default function SignInModal({props}) {
+export default function SignInModal({ props }) {
   const { AuthState, setAuthState } = React.useContext(AuthContext);
   const [authErrorState, setAuthErrorState] = React.useState(false);
 
@@ -49,20 +49,27 @@ export default function SignInModal({props}) {
     const loginEndpoint = `${REACT_APP_API_V2_URL}/token`;
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    await axios.post(loginEndpoint, data).then((response) => {
-      // Set user access token to AuthContext
-      setAuthState({
+    await axios
+      .post(loginEndpoint, data)
+      .then((response) => {
+        // Set user access token to AuthContext
+        setAuthState({
           ...AuthState,
           accessToken: response.data.access_token,
-          authenticated: true
+          authenticated: true,
+        });
+        setAuthErrorState(false);
+        props.closeHandler();
+      })
+      .catch((error) => {
+        if (
+          error.response.status === 400 ||
+          error.response.status === 401 ||
+          error.response.status === 422
+        ) {
+          setAuthErrorState(true);
+        }
       });
-      setAuthErrorState(false);
-      props.closeHandler();
-    }).catch((error) => {
-      if ((error.response.status === 400) || (error.response.status === 401) || (error.response.status === 422)){
-        setAuthErrorState(true);
-      }
-    });
   };
 
   const handleClose = () => {
@@ -84,10 +91,8 @@ export default function SignInModal({props}) {
       aria-describedby="modal-modal-description"
     >
       <Container component="main" maxWidth="xs">
-         <CssBaseline />
-        <Box
-          sx={style}
-        >
+        <CssBaseline />
+        <Box sx={style}>
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
@@ -114,8 +119,8 @@ export default function SignInModal({props}) {
               type="password"
               id="password"
               autoComplete="current-password"
-             />
-            <ErrorStack props={{authErrorState}}/>
+            />
+            <ErrorStack props={{ authErrorState }} />
             <Button
               type="submit"
               fullWidth
@@ -126,7 +131,11 @@ export default function SignInModal({props}) {
             </Button>
             <Grid container>
               <Grid item>
-                <Button variant="text" size="small" onClick={handleShowRegister}>
+                <Button
+                  variant="text"
+                  size="small"
+                  onClick={handleShowRegister}
+                >
                   Не получается войти? Зарегистрироваться
                 </Button>
               </Grid>

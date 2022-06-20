@@ -1,5 +1,5 @@
-import * as React from "react";
-import { useParams } from "react-router-dom";
+import * as React from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -11,7 +11,6 @@ import NestedProductGridList from './ProductGridList';
 import ProductAddFormDialog from '../dialog/ProductAdd';
 import WishlistEditFab from '../dialog/FabButtons';
 import WishlistEditFormDialog from '../dialog/WishlistEdit';
-
 
 export default function WishlistDetailCard() {
   const { REACT_APP_API_V2_URL } = process.env;
@@ -30,11 +29,21 @@ export default function WishlistDetailCard() {
 
   // Products
   const [products, setProducts] = React.useState([]);
-  const [wishlistInfo, setWishlistInfo] = React.useState({name: "", created_at: null, user_id: "", username: "", updated_at: null});
+  const [wishlistInfo, setWishlistInfo] = React.useState({
+    name: '',
+    created_at: null,
+    user_id: '',
+    username: '',
+    updated_at: null,
+  });
   // Wishlist info
-  let creationDelta = "никогда";
-  if (wishlistInfo.created_at !== null){
-    creationDelta = formatRelative(parseISO(wishlistInfo.created_at), new Date(), { locale: ru });
+  let creationDelta = 'никогда';
+  if (wishlistInfo.created_at !== null) {
+    creationDelta = formatRelative(
+      parseISO(wishlistInfo.created_at),
+      new Date(),
+      { locale: ru }
+    );
   }
 
   React.useEffect(() => {
@@ -53,13 +62,34 @@ export default function WishlistDetailCard() {
     <Container>
       <Box sx={{ flexGrow: 1 }} mt={-2}>
         <Typography gutterBottom variant="h4" align="center">
-          Список: &quot;{wishlistInfo.name}&quot; за авторством &quot;{wishlistInfo.username}&quot; от {creationDelta}
+          Список: &quot;{wishlistInfo.name}&quot; за авторством &quot;
+          {wishlistInfo.username}&quot; от {creationDelta}
         </Typography>
       </Box>
-      <NestedProductGridList props={{ "products": products, "username": wishlistInfo.username }}/>
-      <WishlistEditFab props={{showAddProduct: handleClickOpenAddProduct, showEditWishlistName: handleClickOpenEditWishlist, username: wishlistInfo.username}}/>
-      <ProductAddFormDialog props={{open: openAddProduct, handler: setAddProduct, username: wishlistInfo.username}}/>
-      <WishlistEditFormDialog props={{open: openEditWishlistName, handler: setEditWishlistName, username: wishlistInfo.username}}/>
+      <NestedProductGridList
+        props={{ products: products, username: wishlistInfo.username }}
+      />
+      <WishlistEditFab
+        props={{
+          showAddProduct: handleClickOpenAddProduct,
+          showEditWishlistName: handleClickOpenEditWishlist,
+          username: wishlistInfo.username,
+        }}
+      />
+      <ProductAddFormDialog
+        props={{
+          open: openAddProduct,
+          handler: setAddProduct,
+          username: wishlistInfo.username,
+        }}
+      />
+      <WishlistEditFormDialog
+        props={{
+          open: openEditWishlistName,
+          handler: setEditWishlistName,
+          username: wishlistInfo.username,
+        }}
+      />
     </Container>
   );
 }

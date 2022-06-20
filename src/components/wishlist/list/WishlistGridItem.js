@@ -2,7 +2,7 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { Button, } from '@mui/material';
+import { Button } from '@mui/material';
 import { formatRelative, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import IconButton from '@mui/material/IconButton';
@@ -11,8 +11,7 @@ import axios from 'axios';
 import { AuthContext } from '../../GlobalContext';
 import { generateLightColorHex, generateDarkColorHex } from '../../Utils';
 
-
-function ActionButtons({props}) {
+function ActionButtons({ props }) {
   const { AuthState } = React.useContext(AuthContext);
   const handleDelete = async () => {
     const { REACT_APP_API_V1_URL } = process.env;
@@ -22,24 +21,26 @@ function ActionButtons({props}) {
   };
 
   // Only owner can delete card
-  if ((AuthState.authenticated) && (props.username === AuthState.username)) {
+  if (AuthState.authenticated && props.username === AuthState.username) {
     return (
-        <IconButton
+      <IconButton
         size="large"
         edge="start"
         color="inherit"
         aria-label="menu"
         onClick={handleDelete}
-        >
-          <DeleteIcon color="error"/>
-        </IconButton>
+      >
+        <DeleteIcon color="error" />
+      </IconButton>
     );
   }
   return null;
 }
 
-export default function WishlistItem({props}) {
-  const creationDelta = formatRelative(parseISO(props.created_at), new Date(), { locale: ru });
+export default function WishlistItem({ props }) {
+  const creationDelta = formatRelative(parseISO(props.created_at), new Date(), {
+    locale: ru,
+  });
   return (
     <Paper
       sx={{
@@ -49,7 +50,9 @@ export default function WishlistItem({props}) {
         maxWidth: 450,
         flexGrow: 1,
         backgroundColor: (theme) =>
-          theme.palette.mode === 'dark' ? generateDarkColorHex() : generateLightColorHex(),
+          theme.palette.mode === 'dark'
+            ? generateDarkColorHex()
+            : generateLightColorHex(),
       }}
     >
       <Grid container spacing={2}>
@@ -68,12 +71,18 @@ export default function WishlistItem({props}) {
             </Grid>
             <Grid item>
               <Typography sx={{ cursor: 'pointer' }} variant="body2">
-                <Button size="small" variant="outlined" href={`/wishlist/${props.id}`}>Посмотреть список</Button>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  href={`/wishlist/${props.id}`}
+                >
+                  Посмотреть список
+                </Button>
               </Typography>
             </Grid>
           </Grid>
           <Grid item>
-            <ActionButtons props={{ username: props.username, id: props.id}}/>
+            <ActionButtons props={{ username: props.username, id: props.id }} />
           </Grid>
         </Grid>
       </Grid>
