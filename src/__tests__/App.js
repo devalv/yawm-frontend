@@ -1,8 +1,9 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
+import * as React from 'react';
+import renderer from 'react-test-renderer';
+
 import App from '../components/App';
 
-it('check navbar is in place', () => {
-  render(<App />);
-  expect(screen.getByText('Мастер списков')).toBeInTheDocument();
-}, 5);
+it('check that index page can be rendered', () => {
+  const tree = renderer.create(<App />).toJSON();
+  expect(tree).toMatchSnapshot();
+});

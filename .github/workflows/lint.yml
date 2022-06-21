@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [17.x]
 
     steps:
     - uses: actions/checkout@v3
@@ -23,9 +23,3 @@ jobs:
 
     - name: Lint
       run: ./node_modules/.bin/eslint -v & ./node_modules/.bin/eslint . --config .eslintrc
-#TODO: @devalv enable later
-#
-#    - name: Check test coverage
-#      uses: codecov/codecov-action@v1
-#      with:
-#        token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
