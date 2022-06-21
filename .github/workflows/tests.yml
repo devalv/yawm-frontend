@@ -1,0 +1,34 @@
+name: Tests
+
+on: [pull_request]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [17.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: Install dependencies
+      run: npm i
+
+    - name: Tests
+      run: npm run test
+
+    - name: Build
+      run: npm run build
+
+    - name: Coverage
+      run: npm run coverage
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1

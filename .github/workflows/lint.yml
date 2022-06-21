@@ -1,0 +1,25 @@
+name: ESLint
+
+on: [push, pull_request]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [17.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: Install dependencies
+      run: npm i
+
+    - name: Lint
+      run: ./node_modules/.bin/eslint -v & ./node_modules/.bin/eslint . --config .eslintrc
