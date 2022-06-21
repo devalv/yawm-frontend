@@ -10,6 +10,7 @@ Sentry.init({
   debug: DEBUG || false,
   release: 'yawm-frontend@0.3.0',
   environment: DEBUG ? 'dev' : 'production',
+  // JS can`t securely store DSN, so, there is no need to hide it
   dsn: 'https://c7c50c25cc3448c3b7f9da3915c05110@o1201644.ingest.sentry.io/6373679',
   integrations: [new BrowserTracing()],
   // We recommend adjusting this value in production, or using tracesSampler
